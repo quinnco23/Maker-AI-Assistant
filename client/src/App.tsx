@@ -38,6 +38,40 @@ import AdminEscalations from "@/pages/admin/escalations";
 import AdminMetrics from "@/pages/admin/metrics";
 import AdminSettings from "@/pages/admin/settings";
 
+function AppContent() {
+  const { role } = useAppContext();
+
+  return (
+    <Switch>
+      <Route path="/app/member/home" component={MemberHome} />
+      <Route path="/app/member/tools/:toolId" component={ToolDetail} />
+      <Route path="/app/member/tools" component={MemberTools} />
+      <Route path="/app/member/session" component={MemberSession} />
+      <Route path="/app/member/checklists" component={MemberChecklists} />
+      <Route path="/app/member/projects" component={MemberProjects} />
+      <Route path="/app/member/messages" component={MemberMessages} />
+      <Route path="/app/member/profile" component={MemberProfile} />
+
+      <Route path="/app/admin/overview" component={AdminOverview} />
+      <Route path="/app/admin/setup" component={AdminSetup} />
+      <Route path="/app/admin/tools" component={AdminTools} />
+      <Route path="/app/admin/kb" component={AdminKB} />
+      <Route path="/app/admin/safety" component={AdminSafety} />
+      <Route path="/app/admin/checklists" component={AdminChecklists} />
+      <Route path="/app/admin/members" component={AdminMembers} />
+      <Route path="/app/admin/messages" component={AdminMessages} />
+      <Route path="/app/admin/escalations/:id" component={AdminEscalations} />
+      <Route path="/app/admin/escalations" component={AdminEscalations} />
+      <Route path="/app/admin/metrics" component={AdminMetrics} />
+      <Route path="/app/admin/settings" component={AdminSettings} />
+
+      <Route>
+        <Redirect to={role === "member" ? "/app/member/home" : "/app/admin/overview"} />
+      </Route>
+    </Switch>
+  );
+}
+
 function AppShell() {
   const { role } = useAppContext();
   const [commandOpen, setCommandOpen] = useState(false);
@@ -49,33 +83,7 @@ function AppShell() {
         <div className="flex flex-col flex-1 min-w-0">
           <TopBar onCommandOpen={() => setCommandOpen(true)} />
           <main className="flex-1 overflow-auto">
-            <Switch>
-              <Route path="/app/member/home" component={MemberHome} />
-              <Route path="/app/member/tools" component={MemberTools} />
-              <Route path="/app/member/tools/:toolId" component={ToolDetail} />
-              <Route path="/app/member/session" component={MemberSession} />
-              <Route path="/app/member/checklists" component={MemberChecklists} />
-              <Route path="/app/member/projects" component={MemberProjects} />
-              <Route path="/app/member/messages" component={MemberMessages} />
-              <Route path="/app/member/profile" component={MemberProfile} />
-
-              <Route path="/app/admin/overview" component={AdminOverview} />
-              <Route path="/app/admin/setup" component={AdminSetup} />
-              <Route path="/app/admin/tools" component={AdminTools} />
-              <Route path="/app/admin/kb" component={AdminKB} />
-              <Route path="/app/admin/safety" component={AdminSafety} />
-              <Route path="/app/admin/checklists" component={AdminChecklists} />
-              <Route path="/app/admin/members" component={AdminMembers} />
-              <Route path="/app/admin/messages" component={AdminMessages} />
-              <Route path="/app/admin/escalations" component={AdminEscalations} />
-              <Route path="/app/admin/escalations/:id" component={AdminEscalations} />
-              <Route path="/app/admin/metrics" component={AdminMetrics} />
-              <Route path="/app/admin/settings" component={AdminSettings} />
-
-              <Route>
-                <Redirect to={role === "member" ? "/app/member/home" : "/app/admin/overview"} />
-              </Route>
-            </Switch>
+            <AppContent />
           </main>
         </div>
       </div>
@@ -84,13 +92,19 @@ function AppShell() {
   );
 }
 
-function Router() {
+function MainRouter() {
+  const [location] = useLocation();
+  const isAppRoute = location.startsWith("/app");
+
+  if (isAppRoute) {
+    return <AppShell />;
+  }
+
   return (
     <Switch>
       <Route path="/" component={Landing} />
       <Route path="/signin" component={SignIn} />
       <Route path="/signup" component={SignUp} />
-      <Route path="/app/:rest*" component={AppShell} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -103,7 +117,7 @@ function App() {
         <AppProvider>
           <TooltipProvider>
             <Toaster />
-            <Router />
+            <MainRouter />
           </TooltipProvider>
         </AppProvider>
       </ThemeProvider>

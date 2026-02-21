@@ -302,7 +302,7 @@ export default function MemberSession() {
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 data-testid="input-chat-message"
               />
-              <Button size="icon" onClick={handleSend} data-testid="button-send-message">
+              <Button size="icon" onClick={handleSend} data-testid="button-send-message" aria-label="Send message">
                 <Send className="h-4 w-4" />
               </Button>
             </div>
@@ -391,6 +391,7 @@ export default function MemberSession() {
                         size="icon"
                         onClick={handleCopyHandoff}
                         data-testid="button-copy-handoff"
+                        aria-label="Copy handoff summary"
                       >
                         <Copy className="h-4 w-4" />
                       </Button>

@@ -65,8 +65,8 @@ export default function MemberMessages() {
         </p>
       </div>
 
-      <div className="flex rounded-md border min-h-[500px]">
-        <div className="w-full max-w-xs border-r">
+      <div className="flex flex-col md:flex-row rounded-md border min-h-[500px]">
+        <div className="w-full md:max-w-xs border-b md:border-b-0 md:border-r">
           <div className="p-3 border-b">
             <p className="text-sm font-medium">Threads</p>
           </div>

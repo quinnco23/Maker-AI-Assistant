@@ -214,6 +214,7 @@ export default function AdminSetup() {
                     size="icon"
                     onClick={() => removeFile(file.name)}
                     data-testid={`button-remove-${file.name}`}
+                    aria-label={`Remove ${file.name}`}
                   >
                     <X className="h-4 w-4" />
                   </Button>

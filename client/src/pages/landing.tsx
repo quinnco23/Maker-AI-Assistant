@@ -31,6 +31,7 @@ function ThemeToggle() {
       variant="ghost"
       onClick={toggleTheme}
       data-testid="button-theme-toggle"
+      aria-label="Toggle theme"
     >
       {theme === "light" ? <Moon /> : <Sun />}
     </Button>
@@ -40,19 +41,17 @@ function ThemeToggle() {
 export default function Landing() {
   useEffect(() => {
     document.title = "Makerspace AI Assistant - Safety-First Virtual Coach";
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) {
-      meta.setAttribute(
-        "content",
-        "Makerspace AI Assistant gives members step-by-step guidance on high-use tools while enforcing pre-flight checklists and escalating to staff when risk is detected."
-      );
-    } else {
-      const newMeta = document.createElement("meta");
-      newMeta.name = "description";
-      newMeta.content =
-        "Makerspace AI Assistant gives members step-by-step guidance on high-use tools while enforcing pre-flight checklists and escalating to staff when risk is detected.";
-      document.head.appendChild(newMeta);
-    }
+    const desc = "Makerspace AI Assistant gives members step-by-step guidance on high-use tools while enforcing pre-flight checklists and escalating to staff when risk is detected.";
+    const setMeta = (name: string, content: string, attr = "name") => {
+      let el = document.querySelector(`meta[${attr}="${name}"]`);
+      if (!el) { el = document.createElement("meta"); el.setAttribute(attr, name); document.head.appendChild(el); }
+      el.setAttribute("content", content);
+    };
+    setMeta("description", desc);
+    setMeta("og:title", "Makerspace AI Assistant - Safety-First Virtual Coach", "property");
+    setMeta("og:description", desc, "property");
+    setMeta("og:type", "website", "property");
+    setMeta("og:url", window.location.origin, "property");
   }, []);
 
   return (

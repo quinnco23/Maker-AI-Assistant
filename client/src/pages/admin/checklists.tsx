@@ -162,6 +162,7 @@ export default function AdminChecklists() {
                     size="icon"
                     onClick={() => setEditingId(editingId === cl.id ? null : cl.id)}
                     data-testid={`button-edit-${cl.id}`}
+                    aria-label={`Edit checklist`}
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
@@ -241,6 +242,7 @@ export default function AdminChecklists() {
                         size="icon"
                         onClick={() => removeStep(editingChecklist.id, step.id)}
                         data-testid={`button-remove-step-${step.id}`}
+                        aria-label="Remove step"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
