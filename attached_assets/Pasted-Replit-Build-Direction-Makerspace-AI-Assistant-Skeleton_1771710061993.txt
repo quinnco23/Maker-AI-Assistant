@@ -1,0 +1,403 @@
+Replit Build Direction: Makerspace AI Assistant (Skeleton + Guided Demo)
+Goal
+
+Build a multi-tenant SaaS skeleton with 3 core surfaces:
+
+Landing Page (marketing)
+
+Member Dashboard (students/users)
+
+Admin Dashboard (professors/managers)
+
+The build should be a guided demo with mock data and non-functional placeholders where needed. The focus is UI/UX + structure, not full functionality.
+
+1) UI/UX Requirements (make it feel modern)
+
+Use a modern SaaS app-shell: left sidebar + top bar, responsive, collapsible sidebar on mobile.
+
+Use card-based layouts, lots of whitespace, rounded corners, subtle shadows.
+
+Include dark mode toggle (even if simple).
+
+Include command palette UI (⌘K) stub for navigation/search.
+
+Build strong empty states with CTAs (“Upload your first SOP to enable assistant guidance”).
+
+Accessibility baseline:
+
+keyboard navigable
+
+semantic headings
+
+ARIA labels on buttons/inputs
+
+include Plain-Language Mode toggle in Member top bar (it can simply change copy to simpler text).
+
+2) Information Architecture (Routes)
+Public
+
+/ Landing Page
+
+/signin Sign in (mock)
+
+/signup Create account (mock)
+
+App (role-based)
+
+/app/member/*
+
+/app/admin/*
+
+Role switching can be a simple toggle in a dev-only menu for the skeleton.
+
+3) Landing Page (Marketing) — Build this first
+Hero Tagline (use this)
+
+“Your makerspace’s safety-first virtual coach.”
+
+Hero Description (use this)
+
+“Makerspace AI Assistant gives members step-by-step guidance on high-use tools—starting with 3D printers, laser cutters, and electronics—while enforcing pre-flight checklists and escalating to staff when risk is detected.”
+
+Landing Sections (components)
+
+Hero
+
+Primary CTA: Create a Makerspace
+
+Secondary CTA: Try Member Demo
+
+How it works (3 steps)
+
+Choose tool + machine model
+
+Run pre-flight checklist + guided help
+
+If risk → “Call a Coach” handoff summary
+
+Safety-first (card grid)
+
+Prohibited materials
+
+Certification gating
+
+Escalation ladder
+
+For Admins / For Members (2-column)
+
+Admin: upload SOPs, define safety rules, view escalations, metrics
+
+Member: manuals, checklists, project logs, help sessions
+
+Footer
+
+Privacy/retention (stub)
+
+Terms (stub)
+
+Contact (stub)
+
+4) Member Dashboard (Student/User) — Skeleton Pages
+App Shell
+
+Sidebar nav:
+
+Home
+
+Tools Library
+
+Start Session (Demo)
+
+Checklists
+
+Projects
+
+Messages
+
+Profile
+
+Top bar:
+
+Search (stub)
+
+Plain-language toggle
+
+Notifications (stub)
+
+Profile menu
+
+Pages to build (with mock content)
+A) /app/member/home
+
+“Continue” card (recent session)
+
+Quick actions: Start Session, Tools Library, New Project
+
+“Safety reminder” banner (static)
+
+B) /app/member/tools
+
+Tools Library as a grid
+
+Laser Cutter (fully fleshed out demo tool)
+
+3D Printer (stub)
+
+Electronics (stub)
+
+Clicking Laser Cutter opens /app/member/tools/laser
+
+Tabs:
+
+Manuals
+
+Specs
+
+SOP
+
+Safety
+
+Troubleshooting
+
+Each tab shows mock documents/cards (title, tags, “Open PDF” placeholder)
+
+C) /app/member/session (Guided Demo Flow)
+
+Build a stepper UI:
+
+Select Tool (Laser preselected)
+
+Select Machine Model (2–3 mock models)
+
+Select Intent (Plan / Run / Troubleshoot)
+
+Pre-flight checklist modal (required)
+
+“Chat” screen (UI only)
+
+On the chat screen include:
+
+A visible Safety Status panel on the right:
+
+Risk level: Low/Medium/High
+
+Trigger reason (dropdown: unknown material, equipment error, user unsure)
+
+Action result: proceed vs stop & call coach
+
+Important demo behavior (UI-only is fine):
+
+If trigger = “unknown material” OR “equipment error” OR “user unsure”
+
+show STOP + Call a Coach state
+
+generate a “Staff Handoff Summary” card with copy button
+
+D) /app/member/checklists
+
+List of checklists by tool
+
+Checklist run history (mock rows)
+
+“Start checklist” button routes to the session demo
+
+E) /app/member/projects
+
+Project cards (Idea / In Progress / Complete)
+
+Create Project modal (name, tool, goal)
+
+Project detail page with:
+
+notes section
+
+linked sessions list (mock)
+
+F) /app/member/messages
+
+Thread list UI + message view UI (stub)
+
+G) /app/member/profile
+
+certification status (self-declared for MVP)
+
+safety acknowledgements
+
+5) Admin Dashboard (Professor/Owner) — Skeleton Pages
+App Shell
+
+Sidebar nav:
+
+Overview
+
+Setup Wizard (Demo)
+
+Tools & Models
+
+Knowledge Base
+
+Safety Rules
+
+Checklists
+
+Members & Staff
+
+Messages
+
+Escalations
+
+Metrics
+
+Settings
+
+Pages to build (with mock content)
+A) /app/admin/overview
+
+KPI cards (mock):
+
+Sessions today
+
+Escalations
+
+Checklist completion
+
+“Deflection estimate”
+
+“Decision Gates” checklist card:
+
+Supported tools
+
+SOP readiness
+
+Safety rules configured
+
+Accessibility enabled
+
+Retention policy set
+
+B) /app/admin/setup (Wizard — very important)
+
+3-step wizard with completion state:
+
+Choose tools (Bundle A shown; Laser checked by default)
+
+Upload SOPs/manuals (drag/drop UI, mock upload)
+
+Set safety gates (prohibited materials + escalation triggers)
+
+Completion page: “Your makerspace is live” + “Open Member Demo”
+
+C) /app/admin/tools
+
+Toggle tools on/off
+
+Machine models table
+
+“SOP readiness” badge per model (mock)
+
+D) /app/admin/kb
+
+Upload UI (drag/drop)
+
+Table of docs with tags:
+
+tool, model, topic
+
+published toggle
+
+“Preview as member” button that links to member tools page
+
+E) /app/admin/safety
+
+Prohibited materials matrix editor UI (grid)
+
+Certification gating toggles
+
+Escalation triggers checklist
+
+“Coach Mode” copy preview (strict tone text)
+
+F) /app/admin/checklists
+
+Checklist builder UI (add steps)
+
+Assign checklist to tool/model
+
+“Mandatory” toggle
+
+G) /app/admin/members
+
+Member/staff table (name, role, cert, last active)
+
+Invite modal (stub)
+
+H) /app/admin/escalations
+
+Inbox list (New/Acknowledged/Resolved)
+
+Escalation detail page:
+
+member info (mock)
+
+summary
+
+steps attempted
+
+attachments placeholder
+
+resolution notes field
+
+I) /app/admin/metrics
+
+Simple charts placeholders (no real data needed)
+
+Filters UI (last 7/30/90 days)
+
+6) Data Layer (Minimal + Mock)
+
+You can use:
+
+a simple in-memory mock JSON store OR a basic DB schema,
+but do not spend time on real integrations.
+
+If DB is created, keep tables minimal:
+
+users, makerspaces, memberships
+
+tools, machine_models
+
+kb_docs
+
+sessions, messages
+
+escalations
+
+checklists, checklist_runs
+
+7) Demo Script (must be possible in the skeleton)
+
+Make sure the skeleton supports this click-through:
+
+Admin completes Setup Wizard → uploads SOP → publishes
+
+Member opens Tools Library → sees published SOP
+
+Member starts session → picks “unknown material” → sees STOP + escalation summary
+
+Admin opens Escalations inbox → sees the new handoff packet
+
+8) Definition of Done (Skeleton Phase)
+
+Landing page looks polished
+
+Member dashboard and admin dashboard are fully navigable
+
+Tools Library + one “deep” tool page exists (Laser recommended)
+
+Start Session stepper works visually and can trigger escalation summary
+
+Admin setup wizard + KB upload UI + safety rules editor exist
+
+Escalation inbox exists on admin side
+
+Everything is modern, responsive, and presentable
