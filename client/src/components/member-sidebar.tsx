@@ -24,13 +24,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 const memberNav = [
-  { title: "Home", url: "/app/member/home", icon: Home },
-  { title: "Tools Library", url: "/app/member/tools", icon: Wrench },
-  { title: "Start Session", url: "/app/member/session", icon: Play },
-  { title: "Checklists", url: "/app/member/checklists", icon: ClipboardCheck },
-  { title: "Projects", url: "/app/member/projects", icon: FolderKanban },
-  { title: "Messages", url: "/app/member/messages", icon: MessageSquare },
-  { title: "Profile", url: "/app/member/profile", icon: UserCircle },
+  { title: "Dashboard", url: "/app/member/home", icon: Home },
+  { title: "Machines", url: "/app/member/tools", icon: Wrench },
+  // { title: "Start Session", url: "/app/member/session", icon: Play },
+  { title: "Certifications", url: "/app/member/checklists", icon: ClipboardCheck },
+  // { title: "Projects", url: "/app/member/projects", icon: FolderKanban },
+  // { title: "Messages", url: "/app/member/messages", icon: MessageSquare },
+  // { title: "Profile", url: "/app/member/profile", icon: UserCircle },
 ];
 
 export function MemberSidebar() {

@@ -25,6 +25,7 @@ import MemberChecklists from "@/pages/member/checklists";
 import MemberProjects from "@/pages/member/projects";
 import MemberMessages from "@/pages/member/messages";
 import MemberProfile from "@/pages/member/profile";
+import MakerspaceMachineCatalogue from "@/pages/machinecat";
 
 import AdminOverview from "@/pages/admin/overview";
 import AdminSetup from "@/pages/admin/setup";
@@ -37,6 +38,10 @@ import AdminMessages from "@/pages/admin/messages";
 import AdminEscalations from "@/pages/admin/escalations";
 import AdminMetrics from "@/pages/admin/metrics";
 import AdminSettings from "@/pages/admin/settings";
+import MachineList from "./components/MachineList";
+import PrusaCertificationPage from "./pages/member/rusacertland";
+
+
 
 function AppContent() {
   const { role } = useAppContext();
@@ -44,6 +49,8 @@ function AppContent() {
   return (
     <Switch>
       <Route path="/app/member/home" component={MemberHome} />
+      <Route path="/app/member/training/:toolId" component={PrusaCertificationPage} />
+      {/* <Route path="/app/member/pruscert" component={PrusaCertificationPage} /> */}
       <Route path="/app/member/tools/:toolId" component={ToolDetail} />
       <Route path="/app/member/tools" component={MemberTools} />
       <Route path="/app/member/session" component={MemberSession} />
@@ -51,7 +58,7 @@ function AppContent() {
       <Route path="/app/member/projects" component={MemberProjects} />
       <Route path="/app/member/messages" component={MemberMessages} />
       <Route path="/app/member/profile" component={MemberProfile} />
-
+      
       <Route path="/app/admin/overview" component={AdminOverview} />
       <Route path="/app/admin/setup" component={AdminSetup} />
       <Route path="/app/admin/tools" component={AdminTools} />
@@ -64,7 +71,8 @@ function AppContent() {
       <Route path="/app/admin/escalations" component={AdminEscalations} />
       <Route path="/app/admin/metrics" component={AdminMetrics} />
       <Route path="/app/admin/settings" component={AdminSettings} />
-
+      <Route path="/app/admin/machinecat" component={MakerspaceMachineCatalogue} />
+      <Route path="/app/admin/machinelist" component={MachineList} />
       <Route>
         <Redirect to={role === "member" ? "/app/member/home" : "/app/admin/overview"} />
       </Route>

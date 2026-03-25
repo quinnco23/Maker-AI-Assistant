@@ -1,0 +1,24 @@
+[
+  {
+    "shopCategory": "3D Printing",
+    "machineType": "FDM 3D Printer",
+    "manufacturer": "Prusa",
+    "model": "MK4 3d printer",
+    "manualUrl": "https://help.prusa3d.com",
+    "manufacturerUrl": "https://www.prusa3d.com",
+    "slug": "3d-printing-fdm-3d-printer-prusa-mk4-3d-printer",
+    "landingPageUrl": "http://localhost:5000/app/member/tools/Prusa%20MK4%203d%20printer",
+    "qrImagePath": "/qr/3d-printing-fdm-3d-printer-prusa-mk4-3d-printer.png"
+  },
+  {
+    "shopCategory": "CNC",
+    "machineType": "CNC Router",
+    "manufacturer": "ShopBot",
+    "model": "PRSalpha",
+    "manualUrl": "https://docs.shopbottools.com",
+    "manufacturerUrl": "https://www.shopbottools.com",
+    "slug": "cnc-cnc-router-shopbot-prsalpha",
+    "landingPageUrl": "http://localhost:5000/app/member/tools/ShopBot%20PRSalpha",
+    "qrImagePath": "/qr/cnc-cnc-router-shopbot-prsalpha.png"
+  }
+]
