@@ -19,7 +19,7 @@ export default function SignUp() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLocation("/app/admin/overview");
+    setLocation("/app/admin/onboarding");
   }
 
   return (

@@ -41,6 +41,22 @@ import AdminSettings from "@/pages/admin/settings";
 import MachineList from "./components/MachineList";
 import PrusaCertificationPage from "./pages/member/rusacertland";
 
+import AdminOnboardingWelcome from "./pages/admin/AdminOnboardingWelcome";
+
+import CreateMakerspacePage from "./pages/admin/CreateMakerspacePage";
+
+import CreateMachinePage from "./pages/admin/CreateMachinePage";
+
+import CreateCertificationPage from "./pages/admin/CreateCertificationPage";
+
+import ReviewPublishPage from "./pages/admin/ReviewPublishPage";
+
+import InviteMembersPage from "./pages/admin/InviteMembersPage";
+
+
+
+
+
 
 
 function AppContent() {
@@ -48,6 +64,34 @@ function AppContent() {
 
   return (
     <Switch>
+
+<Route
+  path="/app/admin/onboarding/invite"
+  component={InviteMembersPage}
+/>
+
+
+<Route
+  path="/app/admin/onboarding/review"
+  component={ReviewPublishPage}
+/>
+
+<Route
+  path="/app/admin/onboarding/certification"
+  component={CreateCertificationPage}
+/>
+
+      <Route path="/app/admin/onboarding" component={AdminOnboardingWelcome} />
+      <Route
+  path="/app/admin/onboarding/makerspace"
+  component={CreateMakerspacePage}
+/>
+
+<Route
+  path="/app/admin/onboarding/machine"
+  component={CreateMachinePage}
+/>
+
       <Route path="/app/member/home" component={MemberHome} />
       <Route path="/app/member/training/:toolId" component={PrusaCertificationPage} />
       {/* <Route path="/app/member/pruscert" component={PrusaCertificationPage} /> */}

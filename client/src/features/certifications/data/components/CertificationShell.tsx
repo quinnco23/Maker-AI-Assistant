@@ -13,7 +13,7 @@ import { QuickCheckLevelView } from "./QuickCheckLevelView";
 
 import type { CertificationEngine } from "../types";
 import { ScenarioLevelView } from "./ScenarioLevelView";
-import { HotspotLevelView } from "./hotspotLevelView";
+import { HotspotLevelView } from "./HotspotLevelView";
 
 
 

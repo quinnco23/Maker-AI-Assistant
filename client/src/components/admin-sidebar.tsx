@@ -28,16 +28,16 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 const adminNav = [
-  { title: "Overview", url: "/app/admin/overview", icon: LayoutDashboard },
-  { title: "Setup Wizard", url: "/app/admin/setup", icon: Wand2 },
-  { title: "Tools & Models", url: "/app/admin/tools", icon: Wrench },
-  { title: "Knowledge Base", url: "/app/admin/kb", icon: BookOpen },
-  { title: "Safety Rules", url: "/app/admin/safety", icon: Shield },
-  { title: "Checklists", url: "/app/admin/checklists", icon: ClipboardCheck },
-  { title: "Members & Staff", url: "/app/admin/members", icon: Users },
-  { title: "Messages", url: "/app/admin/messages", icon: MessageSquare },
-  { title: "Escalations", url: "/app/admin/escalations", icon: AlertTriangle },
-  { title: "Metrics", url: "/app/admin/metrics", icon: BarChart3 },
+  { title: "Dashboard", url: "/app/admin/overview", icon: LayoutDashboard },
+  { title: "Profile", url: "/app/admin/setup", icon: Wand2 },
+  { title: "machines", url: "/app/admin/tools", icon: Wrench },
+  { title: "Members & Staff", url: "/app/admin/kb", icon: BookOpen },
+  { title: "Safety", url: "/app/admin/safety", icon: Shield },
+  // { title: "Checklists", url: "/app/admin/checklists", icon: ClipboardCheck },
+  // { title: "Members & Staff", url: "/app/admin/members", icon: Users },
+  // { title: "Messages", url: "/app/admin/messages", icon: MessageSquare },
+  // { title: "Escalations", url: "/app/admin/escalations", icon: AlertTriangle },
+  // { title: "Metrics", url: "/app/admin/metrics", icon: BarChart3 },
   { title: "Settings", url: "/app/admin/settings", icon: Settings },
 ];
 

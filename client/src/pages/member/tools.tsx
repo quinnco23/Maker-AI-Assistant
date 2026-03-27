@@ -54,7 +54,7 @@ export default function MemberTools() {
                   <img
   src={tool.image}
   alt={tool.name}
-  className="w-75 h-20 object-cover rounded"
+  className="w-75 h-75 object-cover rounded"
 />
                 </div>
                 {!tool.available && (

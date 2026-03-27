@@ -101,3 +101,27 @@ app.use((req, res, next) => {
     },
   );
 })();
+
+
+app.post("/api/admin/onboarding/publish", async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const payload = req.body;
+
+    // validate payload here
+
+    const result = await publishAdminOnboarding({
+      userId,
+      payload,
+    });
+
+    return res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to publish onboarding" });
+  }
+});
