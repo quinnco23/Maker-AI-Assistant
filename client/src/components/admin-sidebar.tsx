@@ -28,10 +28,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 const adminNav = [
-  { title: "Dashboard", url: "/app/admin/overview", icon: LayoutDashboard },
+  // { title: "Dashboard", url: "/app/admin/overview", icon: LayoutDashboard },
   { title: "Profile", url: "/app/admin/setup", icon: Wand2 },
-  { title: "machines", url: "/app/admin/tools", icon: Wrench },
-  { title: "Members & Staff", url: "/app/admin/kb", icon: BookOpen },
+  { title: "machines", url: "/app/admin/machines", icon: Wrench },
+  { title: "Members & Staff", url: "/app/admin/members", icon: BookOpen },
   { title: "Safety", url: "/app/admin/safety", icon: Shield },
   // { title: "Checklists", url: "/app/admin/checklists", icon: ClipboardCheck },
   // { title: "Members & Staff", url: "/app/admin/members", icon: Users },

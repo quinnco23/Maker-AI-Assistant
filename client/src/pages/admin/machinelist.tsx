@@ -1,4 +1,5 @@
 import machines from "@/data/machines-with-qr.json";
+import { queryClient } from "@/lib/queryClient";
 
 export default function MachineList() {
   return (

@@ -144,32 +144,36 @@ export default function ReviewPublishPage() {
   }, [setLocation]);
 
   async function handlePublish() {
-    if (!onboarding?.makerspace || !onboarding?.machine) return;
-
+    console.log("handlePublish fired");
+    console.log("onboarding:", onboarding);
+  
+    if (!onboarding?.makerspace || !onboarding?.machine) {
+      console.log("Missing onboarding data");
+      return;
+    }
+  
     try {
       setPublishError("");
       setIsPublishing(true);
-
-      // Replace this with your real API call later.
-      // Example:
-      // const res = await fetch("/api/admin/onboarding/publish", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   credentials: "include",
-      //   body: JSON.stringify(onboarding),
-      // });
-      //
-      // if (!res.ok) throw new Error("Failed to publish setup");
-
-      const publishedPayload = {
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        ...onboarding,
-      };
-
-      localStorage.setItem("makerspace_published", JSON.stringify(publishedPayload));
-
-      // Keep onboarding for now in case you want to support editing after publish.
+  
+      const res = await fetch("/api/admin/onboarding/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(onboarding),
+      });
+  
+      console.log("publish response status:", res.status);
+  
+      if (!res.ok) {
+        throw new Error("Failed to publish setup");
+      }
+  
+      const data = await res.json();
+      console.log("publish response data:", data);
+  
+      localStorage.setItem("makerspace_published", JSON.stringify(data));
+  
       setLocation("/app/admin/onboarding/invite");
     } catch (error) {
       console.error(error);
@@ -460,6 +464,7 @@ export default function ReviewPublishPage() {
 
                 <div className="space-y-3">
                   <Button
+                  type="button"
                     size="lg"
                     className="w-full rounded-xl"
                     onClick={handlePublish}

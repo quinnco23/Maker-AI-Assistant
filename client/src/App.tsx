@@ -25,8 +25,12 @@ import MemberChecklists from "@/pages/member/checklists";
 import MemberProjects from "@/pages/member/projects";
 import MemberMessages from "@/pages/member/messages";
 import MemberProfile from "@/pages/member/profile";
+import MemberMachineDetailPage from "@/pages/member/machine-detail";
 import MakerspaceMachineCatalogue from "@/pages/machinecat";
+import AdminMakerspaceProfilePage from "./pages/admin/AdminMakerspaceProfilePage";
 
+import ReviewPublishPage from "./pages/admin/ReviewPublishPage";
+import InviteMembersPage from "./pages/admin/InviteMembersPage";
 import AdminOverview from "@/pages/admin/overview";
 import AdminSetup from "@/pages/admin/setup";
 import AdminTools from "@/pages/admin/tools";
@@ -40,18 +44,18 @@ import AdminMetrics from "@/pages/admin/metrics";
 import AdminSettings from "@/pages/admin/settings";
 import MachineList from "./components/MachineList";
 import PrusaCertificationPage from "./pages/member/rusacertland";
-
 import AdminOnboardingWelcome from "./pages/admin/AdminOnboardingWelcome";
-
 import CreateMakerspacePage from "./pages/admin/CreateMakerspacePage";
-
 import CreateMachinePage from "./pages/admin/CreateMachinePage";
-
 import CreateCertificationPage from "./pages/admin/CreateCertificationPage";
 
-import ReviewPublishPage from "./pages/admin/ReviewPublishPage";
+import ManageMachinesPage from "./pages/admin/ManageMachinesPage";
+import EditMachinePage from "./pages/admin/EditMachinePage";
+import MachineCertificationPage from "./pages/admin/MachineCertificationPage";
+import JoinMakerspacePage from "./pages/JoinMakerspacePage";
+import MemberKnowledgePage from "./pages/member/knowledge";
 
-import InviteMembersPage from "./pages/admin/InviteMembersPage";
+
 
 
 
@@ -64,50 +68,37 @@ function AppContent() {
 
   return (
     <Switch>
-
-<Route
-  path="/app/admin/onboarding/invite"
-  component={InviteMembersPage}
-/>
-
-
-<Route
-  path="/app/admin/onboarding/review"
-  component={ReviewPublishPage}
-/>
-
-<Route
-  path="/app/admin/onboarding/certification"
-  component={CreateCertificationPage}
-/>
-
-      <Route path="/app/admin/onboarding" component={AdminOnboardingWelcome} />
-      <Route
-  path="/app/admin/onboarding/makerspace"
-  component={CreateMakerspacePage}
-/>
-
-<Route
-  path="/app/admin/onboarding/machine"
-  component={CreateMachinePage}
-/>
-
+      {/* <Route path="/join/:slug" component={} /> */}
       <Route path="/app/member/home" component={MemberHome} />
-      <Route path="/app/member/training/:toolId" component={PrusaCertificationPage} />
-      {/* <Route path="/app/member/pruscert" component={PrusaCertificationPage} /> */}
+      <Route path="/app/member/machines/:machineId" component={MemberMachineDetailPage} />
+      {/* <Route path="/app/member/training/:toolId" component={PrusaCertificationPage} /> */}
+      <Route path="/app/member/training/:machineId" component={PrusaCertificationPage} />
+       <Route path= "/app/admin/machines/:machineId/certification" component={PrusaCertificationPage} /> 
+       <Route path="/app/member/knowledge" component={MemberKnowledgePage} />
       <Route path="/app/member/tools/:toolId" component={ToolDetail} />
-      <Route path="/app/member/tools" component={MemberTools} />
+      <Route path="/app/member/tools" component={MachineList} />
       <Route path="/app/member/session" component={MemberSession} />
       <Route path="/app/member/checklists" component={MemberChecklists} />
       <Route path="/app/member/projects" component={MemberProjects} />
       <Route path="/app/member/messages" component={MemberMessages} />
       <Route path="/app/member/profile" component={MemberProfile} />
       
+      
       <Route path="/app/admin/overview" component={AdminOverview} />
-      <Route path="/app/admin/setup" component={AdminSetup} />
-      <Route path="/app/admin/tools" component={AdminTools} />
+      <Route path="/app/admin/setup" component={AdminMakerspaceProfilePage} />
+      {/* <Route path="/app/admin/tools" component={MakerspaceMachineCatalogue} /> */}
+      <Route path="/app/admin/machines/:machineId" component={EditMachinePage} />
+      <Route path="/app/admin/machines" component={MakerspaceMachineCatalogue} />
+      <Route path="/app/admin/manmachines" component={ManageMachinesPage} />
+      
+  
+      <Route path="/app/admin/machines/new" component={MakerspaceMachineCatalogue} />
       <Route path="/app/admin/kb" component={AdminKB} />
       <Route path="/app/admin/safety" component={AdminSafety} />
+      <Route
+  path="/app/admin/machines/:machineId/certification"
+  component={MachineCertificationPage}
+/>
       <Route path="/app/admin/checklists" component={AdminChecklists} />
       <Route path="/app/admin/members" component={AdminMembers} />
       <Route path="/app/admin/messages" component={AdminMessages} />
@@ -117,6 +108,12 @@ function AppContent() {
       <Route path="/app/admin/settings" component={AdminSettings} />
       <Route path="/app/admin/machinecat" component={MakerspaceMachineCatalogue} />
       <Route path="/app/admin/machinelist" component={MachineList} />
+      <Route path="/app/admin/onboarding/invite" component={InviteMembersPage} />
+      <Route path="/app/admin/onboarding/review" component={ReviewPublishPage} />
+      <Route path="/app/admin/onboarding/certification" component={CreateCertificationPage} />
+      <Route path="/app/admin/onboarding/makerspace" component={CreateMakerspacePage} />
+      <Route path="/app/admin/onboarding/machine" component={CreateMachinePage} />
+      <Route path="/app/admin/onboarding" component={AdminOnboardingWelcome} />
       <Route>
         <Redirect to={role === "member" ? "/app/member/home" : "/app/admin/overview"} />
       </Route>
@@ -125,13 +122,17 @@ function AppContent() {
 }
 
 function AppShell() {
-  const { role } = useAppContext();
+  const [location] = useLocation();
   const [commandOpen, setCommandOpen] = useState(false);
+
+  const isAdminRoute = location.startsWith("/app/admin");
+  const isMemberRoute = location.startsWith("/app/member");
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
-        {role === "member" ? <MemberSidebar /> : <AdminSidebar />}
+        {isAdminRoute ? <AdminSidebar /> : isMemberRoute ? <MemberSidebar /> : null}
+
         <div className="flex flex-col flex-1 min-w-0">
           <TopBar onCommandOpen={() => setCommandOpen(true)} />
           <main className="flex-1 overflow-auto">
@@ -157,6 +158,7 @@ function MainRouter() {
       <Route path="/" component={Landing} />
       <Route path="/signin" component={SignIn} />
       <Route path="/signup" component={SignUp} />
+      <Route path="/join/:slug" component={JoinMakerspacePage} />
       <Route component={NotFound} />
     </Switch>
   );

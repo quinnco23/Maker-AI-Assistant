@@ -6,14 +6,14 @@ import { Badge } from "@/components/ui/badge";
  //import prusaQr from "./prus_qr.png"
 
 const tools = [
-  // {
-  //   id: "laser",
-  //   name: "Laser Cutter",
-  //   category: "Fabrication",
-  //   icon: Crosshair,
-  //   description: "High-precision CO2 laser cutting and engraving. Supports wood, acrylic, leather, and more.",
-  //   available: true,
-  // },
+   {
+    id: "laser",
+    name: "Laser Cutter",
+    category: "Fabrication",
+   //icon: Crosshair,
+    description: "High-precision CO2 laser cutting and engraving. Supports wood, acrylic, leather, and more.",
+    available: true,
+   },
    {
      id: "Prusa MK4S 3D Printer",
      name: "Prusa MK4S 3D Printer",
@@ -23,14 +23,14 @@ const tools = [
     available: true,
     image: "https://www.prusa3d.com/cdn-cgi/image/width=1024,format=auto,quality=85/content/images/product/7ee2b138-29c0-4ab4-94d1-7bac57740356.jpg",
    },
-  // {
-  //   id: "electronics",
-  //   name: "Electronics Workbench",
-  //   category: "Electronics",
-  //   icon: Cpu,
-  //   description: "Soldering stations, oscilloscopes, and component libraries for electronics projects.",
-  //   available: false,
-  // },
+   {
+     id: "electronics",
+     name: "Electronics Workbench",
+    category: "Electronics",
+     //icon: Cpu,
+    description: "Soldering stations, oscilloscopes, and component libraries for electronics projects.",
+    available: true,
+   },
 ];
 
 export default function MemberTools() {

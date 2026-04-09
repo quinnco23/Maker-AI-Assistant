@@ -1,0 +1,229 @@
+{
+  "users": [
+    {
+      "id": "dev-user",
+      "email": "dev-user@local.dev",
+      "fullName": "Dev User",
+      "createdAt": "2026-04-03T18:17:58.727Z",
+      "updatedAt": "2026-04-03T18:17:58.727Z"
+    },
+    {
+      "id": "member-user",
+      "email": "member-user@local.dev",
+      "fullName": "Member User",
+      "createdAt": "2026-04-06T21:57:08.535Z",
+      "updatedAt": "2026-04-06T21:57:08.535Z"
+    }
+  ],
+  "makerspaces": [
+    {
+      "id": "ms_1775240278729_qn43mo0k",
+      "name": "MyFabLab_SC",
+      "slug": "myfablab-sc",
+      "location": "Santa CRuz CA",
+      "description": "Great new fab lab designed to break and make.",
+      "createdByUserId": "dev-user",
+      "createdAt": "2026-04-03T18:17:58.729Z",
+      "updatedAt": "2026-04-03T18:17:58.729Z"
+    }
+  ],
+  "memberships": [
+    {
+      "id": "membership_1775240278732_71ube377",
+      "makerspaceId": "ms_1775240278729_qn43mo0k",
+      "userId": "dev-user",
+      "role": "owner",
+      "status": "active",
+      "joinedAt": "2026-04-03T18:17:58.729Z",
+      "createdAt": "2026-04-03T18:17:58.729Z"
+    },
+    {
+      "id": "membership_1775512628537_ze400ngm",
+      "makerspaceId": "ms_1775240278729_qn43mo0k",
+      "userId": "member-user",
+      "role": "member",
+      "status": "active",
+      "joinedAt": "2026-04-06T21:57:08.537Z",
+      "createdAt": "2026-04-06T21:57:08.537Z"
+    }
+  ],
+  "invites": [],
+  "machines": [
+    {
+      "id": "machine_1775240278733_gxepzekm",
+      "makerspaceId": "ms_1775240278729_qn43mo0k",
+      "name": "PrusAA",
+      "slug": "prusaa",
+      "type": "3d_printer",
+      "brand": "Prusa",
+      "model": "MK4",
+      "locationLabel": "back room",
+      "description": "Very Reliable newish machine",
+      "requiresCertification": true,
+      "status": "inactive",
+      "createdAt": "2026-04-03T18:17:58.729Z",
+      "updatedAt": "2026-04-06T19:49:47.854Z"
+    },
+    {
+      "id": "machine_1775245375972_3s2qvefg",
+      "makerspaceId": "ms_1775240278729_qn43mo0k",
+      "name": "Prusa Research Original Prusa MINI+",
+      "slug": "prusa-research-original-prusa-mini",
+      "type": "3D Printing",
+      "brand": "Prusa Research",
+      "model": "Original Prusa MINI+",
+      "locationLabel": "Main Floor",
+      "description": "3D Printer using FDM / MSLA",
+      "requiresCertification": true,
+      "status": "active",
+      "createdAt": "2026-04-03T19:42:55.972Z",
+      "updatedAt": "2026-04-03T19:42:55.972Z"
+    },
+    {
+      "id": "machine_1775245605044_e001lx7x",
+      "makerspaceId": "ms_1775240278729_qn43mo0k",
+      "name": "Prusa Research Original Prusa XL",
+      "slug": "prusa-research-original-prusa-xl",
+      "type": "3D Printing",
+      "brand": "Prusa Research",
+      "model": "Original Prusa XL",
+      "locationLabel": "Main Floor",
+      "description": "3D Printer using FDM / MSLA",
+      "requiresCertification": true,
+      "status": "active",
+      "createdAt": "2026-04-03T19:46:45.044Z",
+      "updatedAt": "2026-04-03T19:46:45.044Z"
+    },
+    {
+      "id": "machine_1775437567078_koajnub5",
+      "makerspaceId": "ms_1775240278729_qn43mo0k",
+      "name": "UltiMaker UltiMaker S3",
+      "slug": "ultimaker-ultimaker-s3",
+      "type": "3D Printing",
+      "brand": "UltiMaker",
+      "model": "UltiMaker S3",
+      "locationLabel": "Main Floor",
+      "description": "3D Printer using FDM",
+      "requiresCertification": true,
+      "status": "active",
+      "createdAt": "2026-04-06T01:06:07.078Z",
+      "updatedAt": "2026-04-06T01:06:07.078Z"
+    },
+    {
+      "id": "machine_1775439989561_yzlk3wsq",
+      "makerspaceId": "ms_1775240278729_qn43mo0k",
+      "name": "Bambu Lab A1 mini",
+      "slug": "bambu-lab-a1-mini",
+      "type": "3D Printing",
+      "brand": "Bambu Lab",
+      "model": "A1 mini",
+      "locationLabel": "Main Floor",
+      "description": "3D Printer using FDM",
+      "requiresCertification": true,
+      "status": "active",
+      "createdAt": "2026-04-06T01:46:29.561Z",
+      "updatedAt": "2026-04-06T18:58:28.433Z"
+    },
+    {
+      "id": "machine_1775501899130_bs10gop2",
+      "makerspaceId": "ms_1775240278729_qn43mo0k",
+      "name": "Prusa Research Original Prusa MINI+",
+      "slug": "prusa-research-original-prusa-mini-2",
+      "type": "3D Printing",
+      "brand": "Prusa Research",
+      "model": "Original Prusa MINI+",
+      "locationLabel": "Main Floor",
+      "description": "3D Printer using FDM / MSLA",
+      "requiresCertification": true,
+      "status": "active",
+      "catalogSourceId": 1,
+      "createdAt": "2026-04-06T18:58:19.130Z",
+      "updatedAt": "2026-04-06T18:58:19.130Z"
+    }
+  ],
+  "certificationModules": [
+    {
+      "id": "certmod_1775240278735_ty4t9gcb",
+      "makerspaceId": "ms_1775240278729_qn43mo0k",
+      "machineId": "machine_1775240278733_gxepzekm",
+      "title": "Prusa MK4S Operator Badge",
+      "mode": "template",
+      "templateId": "prusa-mk4s-operator-badge",
+      "contentJson": null,
+      "estimatedMinutes": 8,
+      "passingScore": 80,
+      "isPublished": true,
+      "createdAt": "2026-04-03T18:17:58.729Z",
+      "updatedAt": "2026-04-03T18:17:58.729Z"
+    }
+  ],
+  "machineCertifications": [
+    {
+      "id": "machinecert_1775240278736_jxfa3sug",
+      "machineId": "machine_1775240278733_gxepzekm",
+      "certificationModuleId": "certmod_1775240278735_ty4t9gcb",
+      "required": true,
+      "createdAt": "2026-04-03T18:17:58.729Z"
+    }
+  ],
+
+  
+  "certificationAttempts": [],
+  "userCertifications": [],
+
+  "knowledgeArticles": [
+  {
+    "id": "kb_1",
+    "makerspaceId": "ms_1775240278729_qn43mo0k",
+    "title": "How to Level a Prusa Bed (Quick Start)",
+    "content": "1. Clean the build plate with isopropyl alcohol.\n2. Run automatic mesh bed leveling.\n3. Adjust live Z until first layer is smooth and slightly squished.\n4. Print a first layer test.\n\nTip: If lines are not sticking → go lower. If too squished → go higher.",
+    "machineId": "machine_1775240278733_gxepzekm",
+    "tags": ["3D Printing", "Setup", "Beginner"],
+    "difficulty": "beginner",
+    "createdAt": "2026-04-07T00:00:00.000Z",
+    "updatedAt": "2026-04-07T00:00:00.000Z"
+  },
+  {
+    "id": "kb_2",
+    "makerspaceId": "ms_1775240278729_qn43mo0k",
+    "title": "Fixing Stringing in 3D Prints",
+    "content": "Common causes:\n- Temperature too high\n- Retraction too low\n\nFix:\n- Lower nozzle temp by 5–10°C\n- Increase retraction distance slightly\n- Enable combing in slicer\n\nQuick test: Print a retraction tower.",
+    "tags": ["3D Printing", "Troubleshooting"],
+    "difficulty": "beginner",
+    "createdAt": "2026-04-07T00:00:00.000Z",
+    "updatedAt": "2026-04-07T00:00:00.000Z"
+  },
+  {
+    "id": "kb_3",
+    "makerspaceId": "ms_1775240278729_qn43mo0k",
+    "title": "PLA vs PETG: When to Use Each",
+    "content": "PLA:\n- Easy to print\n- Good for prototypes\n- Lower strength\n\nPETG:\n- Stronger and more flexible\n- Better for functional parts\n- Slightly harder to print\n\nRule of thumb: PLA for learning, PETG for real-world use.",
+    "tags": ["Materials", "3D Printing"],
+    "difficulty": "beginner",
+    "createdAt": "2026-04-07T00:00:00.000Z",
+    "updatedAt": "2026-04-07T00:00:00.000Z"
+  },
+  {
+    "id": "kb_4",
+    "makerspaceId": "ms_1775240278729_qn43mo0k",
+    "title": "First Print Checklist (Don’t Skip This)",
+    "content": "Before printing:\n- Check bed is clean\n- Confirm correct filament loaded\n- Slice with correct profile\n- Watch first layer for 2–3 minutes\n\nMost failures happen in the first layer.",
+    "tags": ["Checklist", "Beginner"],
+    "difficulty": "beginner",
+    "createdAt": "2026-04-07T00:00:00.000Z",
+    "updatedAt": "2026-04-07T00:00:00.000Z"
+  },
+  {
+    "id": "kb_5",
+    "makerspaceId": "ms_1775240278729_qn43mo0k",
+    "title": "Why Your Print Isn’t Sticking",
+    "content": "Top causes:\n- Dirty bed\n- Incorrect Z height\n- Wrong temperature\n\nFix order:\n1. Clean bed\n2. Re-level\n3. Increase bed temp slightly\n\nIf still failing → use glue stick.",
+    "tags": ["Troubleshooting"],
+    "difficulty": "beginner",
+    "createdAt": "2026-04-07T00:00:00.000Z",
+    "updatedAt": "2026-04-07T00:00:00.000Z"
+  }
+]
+
+  
+}

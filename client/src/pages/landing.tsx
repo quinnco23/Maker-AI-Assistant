@@ -40,7 +40,7 @@ function ThemeToggle() {
 
 export default function Landing() {
   useEffect(() => {
-    document.title = "Makerspace AI Assistant - Safety-First Virtual Coach";
+    document.title = "MakerMatic is AI driven virtual Makerspace mentor and community";
     const desc = "Makerspace AI Assistant gives members step-by-step guidance on high-use tools while enforcing pre-flight checklists and escalating to staff when risk is detected.";
     const setMeta = (name: string, content: string, attr = "name") => {
       let el = document.querySelector(`meta[${attr}="${name}"]`);
@@ -58,9 +58,12 @@ export default function Landing() {
     <div className="min-h-screen bg-background text-foreground">
       <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3 flex-wrap">
+
           <Link href="/" data-testid="link-home">
-            <span className="text-4xl font-semibold tracking-tight">MakersMatic</span>
+
+            <img src="Logo330.png" className="h-20" />
           </Link>
+          
           <div className="flex items-center gap-2 flex-wrap">
             <ThemeToggle />
             <Link href="/signin">
@@ -76,26 +79,23 @@ export default function Landing() {
       </nav>
 
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/20 to-primary/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-100 to-blue-200 " />
         <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
-          }}
+          className="absolute inset-0 "
+        // style={{
+        //   backgroundImage:
+        //     "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+        // }}
         />
-        <div className="relative mx-auto max-w-4xl px-6 py-24 text-center sm:py-32 ">
+        <div className="relative mx-auto max-w-4xl px-6 py-24 text-center sm:py-32 text-gray-500">
           <Badge variant="secondary" className="mb-6">
             Built by Makers, for Makers.
           </Badge>
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            This is not software, it's a Makers Mentor.
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl ">
+            AI Driven Makerspace Mentor and Community
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Makerspace AI Assistant gives members step-by-step guidance on high-use
-            tools&mdash;starting with 3D printers, laser cutters, and
-            electronics&mdash;while enforcing pre-flight checklists and escalating to
-            staff when risk is detected.
+            MakerMatic gives you and your members the tools to create a Makerspace of excellence.Let MakerMatic do the hard work so your Space can focus on making cool stuff!
           </p>
           <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
             <Link href="/signup">
@@ -105,7 +105,7 @@ export default function Landing() {
             </Link>
             <Link href="/app/member/home">
               <Button size="lg" variant="outline" data-testid="button-try-demo">
-                Try Member Demo
+                Join A Makerspace
               </Button>
             </Link>
           </div>
@@ -116,7 +116,7 @@ export default function Landing() {
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight">How It Works</h2>
           <p className="mt-2 text-muted-foreground">
-            Three steps from selecting a tool to safe, guided operation.
+            Three steps to better, safer and efficiant Makers experiance. 
           </p>
         </div>
         <div className="mt-12 grid gap-8 sm:grid-cols-3">
@@ -124,23 +124,23 @@ export default function Landing() {
             {
               icon: Wrench,
               step: "1",
-              title: "Choose Tool + Machine Model",
+              title: "Build your Makerspace",
               description:
-                "Select the tool you need and its specific make and model. The assistant loads the right manual and safety data.",
+                "Sign up and create your Makerspace profile to your own specifications",
             },
             {
               icon: ClipboardCheck,
               step: "2",
-              title: "Run Pre-Flight Checklist",
+              title: "Add machines and Certifications",
               description:
-                "Walk through a guided checklist before powering on. Get step-by-step help for your task with safety guardrails.",
+                " Add your Makerspace machines and build your safety and certification programs ",
             },
             {
               icon: PhoneCall,
               step: "3",
-              title: "Risk Detected \u2192 Coach Handoff",
+              title: "Create your Makers community",
               description:
-                "If the AI detects a safety concern, it generates a handoff summary and connects you with a certified coach.",
+                "Invite and add all your Makerspace members to begin thier makers journey",
             },
           ].map((item) => (
             <div
@@ -167,7 +167,7 @@ export default function Landing() {
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight">
-              Safety-First by Design
+              Safety by Design
             </h2>
             <p className="mt-2 text-muted-foreground">
               Every interaction is built around keeping your members safe.
