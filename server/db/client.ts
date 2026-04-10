@@ -1,6 +1,9 @@
-// server/db/client.ts
 import postgres from "postgres";
 
-export const sql = postgres(process.env.POSTGRES_URL!, {
+if (!process.env.POSTGRES_URL) {
+  throw new Error("POSTGRES_URL is not set");
+}
+
+export const sql = postgres(process.env.POSTGRES_URL, {
   ssl: "require",
 });
