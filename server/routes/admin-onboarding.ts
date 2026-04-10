@@ -1,6 +1,6 @@
 // server/routes/admin-onboarding.ts
 
-import { publishAdminOnboarding } from "server/services.ts/admin-onboarding.service";
+import { publishAdminOnboarding } from "server/services/admin-onboarding.service";
 
 export function registerAdminOnboardingRoutes(app: any) {
   app.post("/api/admin/onboarding/publish", async (req: any, res: any) => {

@@ -1,6 +1,6 @@
 // server/routes/admin-makerspace.ts
 
-import { getAdminMakerspaceByUserId } from "server/services.ts/admin-onboarding.service";
+import { getAdminMakerspaceByUserId } from "server/services/admin-onboarding.service";
 
 export function registerAdminMakerspaceRoutes(app: any) {
   app.get("/api/admin/makerspace", async (req: any, res: any) => {
