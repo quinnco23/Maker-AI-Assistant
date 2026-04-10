@@ -59,21 +59,13 @@ type PublishAdminOnboardingInput = {
 
 async function ensureUserExists(userId: string): Promise<UserRecord> {
   const existing = await storage.getUserById(userId);
-  if (existing) return existing;
-
-  const now = nowIso();
-  const fallbackUser: UserRecord = {
-    id: userId,
-    email: `${userId}@local.dev`,
-    fullName: "Dev User",
-    createdAt: now,
-    updatedAt: now,
-  };
-
-  await storage.createUser(fallbackUser);
-  return fallbackUser;
+  if (!existing) {
+    throw new Error(
+      "Authenticated user not found in database. Sync the user record before publishing."
+    );
+  }
+  return existing;
 }
-
 async function uniqueMakerspaceSlug(base: string): Promise<string> {
   const normalized = slugify(base) || "makerspace";
   let candidate = normalized;
