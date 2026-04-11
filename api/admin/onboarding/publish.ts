@@ -1,7 +1,7 @@
 import "dotenv/config";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-import { publishAdminOnboarding } from "../../../server/services/admin-onboarding.service";
+import { publishAdminOnboarding } from "../../../server/services/admin-onboarding.service.js";
 
 export default async function handler(
   req: VercelRequest,
