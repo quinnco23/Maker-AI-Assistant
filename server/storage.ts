@@ -1,4 +1,4 @@
-import { sql } from "./db/client";
+import { sql } from "./db/client.js";
 import type {
   AdminMakerspaceView,
   CertificationAttemptRecord,
@@ -11,7 +11,7 @@ import type {
   MakerspaceRecord,
   UserCertificationRecord,
   UserRecord,
-} from "./db/schema";
+} from "./db/schema.js";
 
 export const storage = {
   async getUsers(): Promise<UserRecord[]> {

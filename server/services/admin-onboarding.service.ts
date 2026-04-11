@@ -12,9 +12,9 @@ import {
   type MakerspaceMembershipRecord,
   type MakerspaceRecord,
   type UserRecord,
-} from "../db/schema";
+} from "../db/schema.js";
 
-import { storage } from "../storage";
+import { storage } from "../storage.js";
 
 export type PublishOnboardingRequest = {
   makerspace: {
