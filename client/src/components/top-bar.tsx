@@ -9,16 +9,25 @@ import { Label } from "@/components/ui/label";
 
 interface TopBarProps {
   onCommandOpen?: () => void;
+  showSidebarTrigger?: boolean;
 }
 
-export function TopBar({ onCommandOpen }: TopBarProps) {
+export function TopBar({
+  onCommandOpen,
+  showSidebarTrigger = true,
+}: TopBarProps) {
   const { theme, toggleTheme } = useTheme();
   const { role, setRole, plainLanguage, togglePlainLanguage } = useAppContext();
 
   return (
-    <header className="flex items-center justify-between gap-2 border-b px-3 py-2 bg-background sticky top-0 z-50" role="banner">
+    <header className="flex items-center justify-between gap-2 border-b px-3 py-2 bg-background sticky top-0 z-20" role="banner">
       <div className="flex items-center gap-2">
-        <SidebarTrigger data-testid="button-sidebar-toggle" aria-label="Toggle sidebar" />
+      {showSidebarTrigger && (
+  <SidebarTrigger
+    data-testid="button-sidebar-toggle"
+    aria-label="Toggle sidebar"
+  />
+)}
 
         <Button
           variant="outline"
@@ -39,7 +48,7 @@ export function TopBar({ onCommandOpen }: TopBarProps) {
       <div className="flex items-center gap-2">
         {role === "member" && (
           <div className="hidden sm:flex items-center gap-1.5 mr-2">
-            <Globe className="h-3.5 w-3.5 text-muted-foreground" />
+            {/* <Globe className="h-3.5 w-3.5 text-muted-foreground" />
             <Label htmlFor="plain-lang" className="text-xs text-muted-foreground cursor-pointer">
               Plain Language
             </Label>
@@ -49,7 +58,7 @@ export function TopBar({ onCommandOpen }: TopBarProps) {
               onCheckedChange={togglePlainLanguage}
               data-testid="switch-plain-language"
               aria-label="Toggle plain language mode"
-            />
+            /> */}
           </div>
         )}
 
@@ -77,7 +86,7 @@ export function TopBar({ onCommandOpen }: TopBarProps) {
         </Button>
 
         <div className="hidden lg:block">
-          <Button
+          {/* <Button
             variant="outline"
             size="sm"
             onClick={() => setRole(role === "member" ? "admin" : "member")}
@@ -89,7 +98,7 @@ export function TopBar({ onCommandOpen }: TopBarProps) {
               Switch to {role === "member" ? "Admin" : "Member"}
             </span>
             <Badge variant="outline" className="ml-1.5 text-[10px]">Dev</Badge>
-          </Button>
+          </Button> */}
         </div>
       </div>
     </header>

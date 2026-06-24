@@ -11,14 +11,60 @@ export default function SignIn() {
   const [, setLocation] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
+  
 
   useEffect(() => {
     document.title = "Sign In - Makerspace AI Assistant";
   }, []);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLocation("/app/member/home");
+  
+    const loginRes = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    });
+  
+    const loginJson = await loginRes.json();
+  
+    if (!loginRes.ok) {
+      console.error(loginJson);
+      return;
+    }
+  
+    const meRes = await fetch("/api/auth/me", {
+      credentials: "include",
+    });
+  
+    const meJson = await meRes.json();
+
+    console.log("auth me:", meJson);
+console.log("memberships:", meJson.memberships);
+  
+    const memberships = meJson.memberships ?? [];
+  
+    const adminMembership = memberships.find((m: any) =>
+      ["owner", "admin", "instructor"].includes(String(m.role).toLowerCase()),
+    );
+  
+    const memberMembership = memberships.find((m: any) => m.role === "member");
+  
+    if (adminMembership) {
+      setLocation(
+        meJson.adminMakerspace?.onboardingCompleted
+          ? "/app/admin/setup"
+          : "/app/admin/onboarding",
+      );
+    } else if (memberMembership) {
+      setLocation("/app/member/home");
+    } else {
+      setLocation("/");
+    }
   }
 
   return (

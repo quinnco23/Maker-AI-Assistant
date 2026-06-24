@@ -153,3 +153,11 @@ export type CertificationEngine = {
   completeLevel: (payload: CompleteLevelPayload) => void;
   reset: () => void;
 };
+
+type StaffReviewer = {
+  id: string;
+  fullName: string;
+  email: string;
+  avatarUrl?: string | null;
+  role: "owner" | "admin" | "instructor";
+};

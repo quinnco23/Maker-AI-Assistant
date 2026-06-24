@@ -4,7 +4,7 @@ export const prusaMk4sCertificationModule: CertificationModule = {
   id: "cert-prusa-mk4s-operator",
   machineId: "prusa-mk4s",
   version: "1.0.0",
-  title: "Prusa MK4S Operator Badge",
+  title: " 3D Print Operator Badge",
   subtitle: "Learn it. Print it. Earn it.",
   theme: {
     icon: "printer-3d",
@@ -27,7 +27,7 @@ export const prusaMk4sCertificationModule: CertificationModule = {
     },
   },
   intro: {
-    headline: "Welcome to the MK4S preflight challenge",
+    headline: "Welcome to the 3d Printing preflight challenge",
     body:
       "This badge unlocks independent use of the Prusa MK4S in the makerspace. You will complete five short levels and one final boss challenge.",
     objectives: [
@@ -45,10 +45,47 @@ export const prusaMk4sCertificationModule: CertificationModule = {
   },
   levels: [
     {
-      id: "lvl-1-meet-the-mk4s",
+      id: "lvl-1-process-overview",
       type: "lesson",
-      title: "Level 1: Meet the MK4S",
-      shortTitle: "Meet the Printer",
+      title: "3d-Printing Overview",
+      shortTitle: "Process Overview",
+      xp: 10,
+      unlocks: ["lvl-2-safe-startup"],
+      media: {
+        kind: "image",
+        //url: "/public/prusamk4.jpg",
+        alt: "Process overview",
+        
+        
+      },
+      narrative: [
+        "3D printing, or additive manufacturing, creates physical objects from digital CAD models by depositing materials layer-by-layer, contrary to subtractive manufacturing. This technology enables rapid prototyping, complex geometries, and mass customization across industries like aerospace, healthcare, and automotive. Common methods include Material Extrusion (FDM), Powder Bed Fusion (SLS), and Vat Photopolymerization (SLA)",
+      ],
+      callouts: [
+        "Modeling: A 3D model is created using computer-aided design (CAD) software or a 3D scanner.",
+        "Slicing: The model is converted into a 3D printer-readable format (STL or OBJ) and sliced into hundreds or thousands of 2D layers.",
+        "Printing: The printer deposits material—such as plastic, metal, or resin—layer by layer to create the physical object.",
+        "Finishing: The object may require post-processing, such as cleaning, sanding, or curing with UV light."
+      ],
+      keyTakeaways: [
+        
+        "Material Extrusion (e.g., FDM/FFF): Melts and extrudes thermoplastic filament through a nozzle.",
+        "Powder Bed Fusion (e.g., SLS, MJF): Uses a laser or heat to fuse powdered materials (plastics, metal).",
+        "Vat Photopolymerization (e.g., SLA, DLP): Uses light to cure liquid resin into solid plastic.",
+        "Material Jetting: Deposits droplets of material that are cured instantly.",
+        "Binder Jetting: Uses a binding agent to glue powder layers together.",
+        "Directed Energy Deposition: Deposits and melts material simultaneously, often using metal powder or wire.",
+        "Sheet Lamination: Bonds sheets of material together."
+
+      ],
+      ctaLabel: "Start Preflight",
+    },
+
+    {
+      id: "lvl-2-meet-the-mk4s",
+      type: "lesson",
+      title: "Process overview",
+      shortTitle: "Meet the Machine",
       xp: 10,
       unlocks: ["lvl-2-safe-startup"],
       media: {
@@ -59,7 +96,7 @@ export const prusaMk4sCertificationModule: CertificationModule = {
         
       },
       narrative: [
-        "The Prusa MK4S is a desktop FDM printer designed to be approachable for beginners while still delivering fast, high-quality results.",
+        "The Machine is a desktop FDM printer designed to be approachable for beginners while still delivering fast, high-quality results.",
         "The main parts you need to recognize are the print sheet, heated bed, nozzle area, screen, spool holder, and filament path.",
         "As an operator, your job is not to tune every setting. Your job is to use the approved workflow safely and leave the printer in good condition.",
       ],
@@ -75,6 +112,9 @@ export const prusaMk4sCertificationModule: CertificationModule = {
       ],
       ctaLabel: "Start Preflight",
     },
+
+
+    
     {
       id: "lvl-2-safe-startup",
       type: "scenario",
@@ -82,7 +122,7 @@ export const prusaMk4sCertificationModule: CertificationModule = {
       shortTitle: "Preflight Check",
       xp: 15,
       unlocks: ["lvl-3-approved-workflow"],
-      prompt: "You arrive at the MK4S and want to begin a print.",
+      prompt: "You arrive at the machine and want to begin a print.",
       situation:
         "There is some leftover plastic near the nozzle area and fingerprints on the print sheet. The previous user is gone.",
       choices: [
@@ -123,104 +163,104 @@ export const prusaMk4sCertificationModule: CertificationModule = {
       successMessage:
         "Preflight complete. Good operators inspect before they print.",
     },
-    {
-      id: "lvl-3-approved-workflow",
-      type: "sort",
-      title: "Level 3: Approved Workflow",
-      shortTitle: "Load & Print",
-      xp: 20,
-      unlocks: ["lvl-4-first-layer-watch"],
-      prompt: "Sort each action into the correct bucket.",
-      categories: ["Approved", "Not Approved"],
-      items: [
-        {
-          id: "item-1",
-          label: "Use an approved PrusaSlicer profile for the machine and material",
-          correctCategory: "Approved",
-          feedback:
-            "Yes. Approved profiles are the baseline workflow for consistent results.",
-        },
-        {
-          id: "item-2",
-          label: "Guess your own nozzle temperature because it might be faster",
-          correctCategory: "Not Approved",
-          feedback:
-            "No. Beginners should not freestyle temperatures on shared machines.",
-        },
-        {
-          id: "item-3",
-          label: "Confirm the selected material matches the filament actually loaded",
-          correctCategory: "Approved",
-          feedback:
-            "Correct. Material/profile mismatches can ruin prints and waste time.",
-        },
-        {
-          id: "item-4",
-          label: "Use random internet g-code from an unknown source without review",
-          correctCategory: "Not Approved",
-          feedback:
-            "Not approved. Shared makerspace workflows should use trusted files and reviewed settings.",
-        },
-        {
-          id: "item-5",
-          label: "Watch the printer begin the print instead of walking away immediately",
-          correctCategory: "Approved",
-          feedback:
-            "Correct. Monitoring startup is required for safe operation.",
-        },
-      ],
-    },
-    {
-      id: "lvl-4-first-layer-watch",
-      type: "hotspot",
-      title: "Level 4: First Layer Watch",
-      shortTitle: "Spot the Problem",
-      xp: 20,
-      unlocks: ["lvl-5-reset-the-station"],
-      prompt: "Tap the areas that would make you stop and inspect the print.",
-      imageUrl: "/images/certifications/prusa-mk4s/first-layer-scene.png",
-      imageAlt:
-        "A first-layer print scene showing one good area and several warning signs",
-      requiredCorrect: 3,
-      hotspots: [
-        {
-          id: "hs-1",
-          x: 24,
-          y: 58,
-          label: "Filament not sticking to the sheet",
-          correct: true,
-          feedback:
-            "Correct. Poor first-layer adhesion is a stop-and-check issue.",
-        },
-        {
-          id: "hs-2",
-          x: 54,
-          y: 42,
-          label: "Stringy blob forming near the nozzle path",
-          correct: true,
-          feedback:
-            "Correct. Unexpected blobbing or spaghetti is a warning sign.",
-        },
-        {
-          id: "hs-3",
-          x: 72,
-          y: 60,
-          label: "First layer lines look even and consistent",
-          correct: false,
-          feedback:
-            "That area looks healthy. You are looking for warning signs, not good print zones.",
-        },
-        {
-          id: "hs-4",
-          x: 36,
-          y: 31,
-          label: "Part of the first layer is dragging or lifting",
-          correct: true,
-          feedback:
-            "Correct. Dragging/lifting often means you should stop and inspect.",
-        },
-      ],
-    },
+    // {
+    //   id: "lvl-3-approved-workflow",
+    //   type: "sort",
+    //   title: "Level 3: Approved Workflow",
+    //   shortTitle: "Load & Print",
+    //   xp: 20,
+    //   unlocks: ["lvl-4-first-layer-watch"],
+    //   prompt: "Sort each action into the correct bucket.",
+    //   categories: ["Approved", "Not Approved"],
+    //   items: [
+    //     {
+    //       id: "item-1",
+    //       label: "Use an approved PrusaSlicer profile for the machine and material",
+    //       correctCategory: "Approved",
+    //       feedback:
+    //         "Yes. Approved profiles are the baseline workflow for consistent results.",
+    //     },
+    //     {
+    //       id: "item-2",
+    //       label: "Guess your own nozzle temperature because it might be faster",
+    //       correctCategory: "Not Approved",
+    //       feedback:
+    //         "No. Beginners should not freestyle temperatures on shared machines.",
+    //     },
+    //     {
+    //       id: "item-3",
+    //       label: "Confirm the selected material matches the filament actually loaded",
+    //       correctCategory: "Approved",
+    //       feedback:
+    //         "Correct. Material/profile mismatches can ruin prints and waste time.",
+    //     },
+    //     {
+    //       id: "item-4",
+    //       label: "Use random internet g-code from an unknown source without review",
+    //       correctCategory: "Not Approved",
+    //       feedback:
+    //         "Not approved. Shared makerspace workflows should use trusted files and reviewed settings.",
+    //     },
+    //     {
+    //       id: "item-5",
+    //       label: "Watch the printer begin the print instead of walking away immediately",
+    //       correctCategory: "Approved",
+    //       feedback:
+    //         "Correct. Monitoring startup is required for safe operation.",
+    //     },
+    //   ],
+    // },
+    // {
+    //   id: "lvl-4-first-layer-watch",
+    //   type: "hotspot",
+    //   title: "Level 4: First Layer Watch",
+    //   shortTitle: "Spot the Problem",
+    //   xp: 20,
+    //   unlocks: ["lvl-5-reset-the-station"],
+    //   prompt: "Tap the areas that would make you stop and inspect the print.",
+    //   imageUrl: "/images/certifications/prusa-mk4s/first-layer-scene.png",
+    //   imageAlt:
+    //     "A first-layer print scene showing one good area and several warning signs",
+    //   requiredCorrect: 3,
+    //   hotspots: [
+    //     {
+    //       id: "hs-1",
+    //       x: 24,
+    //       y: 58,
+    //       label: "Filament not sticking to the sheet",
+    //       correct: true,
+    //       feedback:
+    //         "Correct. Poor first-layer adhesion is a stop-and-check issue.",
+    //     },
+    //     {
+    //       id: "hs-2",
+    //       x: 54,
+    //       y: 42,
+    //       label: "Stringy blob forming near the nozzle path",
+    //       correct: true,
+    //       feedback:
+    //         "Correct. Unexpected blobbing or spaghetti is a warning sign.",
+    //     },
+    //     {
+    //       id: "hs-3",
+    //       x: 72,
+    //       y: 60,
+    //       label: "First layer lines look even and consistent",
+    //       correct: false,
+    //       feedback:
+    //         "That area looks healthy. You are looking for warning signs, not good print zones.",
+    //     },
+    //     {
+    //       id: "hs-4",
+    //       x: 36,
+    //       y: 31,
+    //       label: "Part of the first layer is dragging or lifting",
+    //       correct: true,
+    //       feedback:
+    //         "Correct. Dragging/lifting often means you should stop and inspect.",
+    //     },
+    //   ],
+    // },
     {
       id: "lvl-5-reset-the-station",
       type: "quick_check",

@@ -9,6 +9,8 @@ import { registerMachineCertificationRoutes } from "./routes/machine-certificati
 import { registerJoinRoutes } from "./routes/join";
 import { registerMemberRoutes } from "./routes/member";
 import { registerKnowledgeRoutes } from "./routes/knowledge";
+import { registerAuthRoutes } from "./routes/auth.routes";
+import { registerScheduleCertificationRoutes } from "./routes/cert-scheduel";
 
 
 export async function registerRoutes(
@@ -16,13 +18,15 @@ export async function registerRoutes(
   app: Express
   
 ): Promise<Server> {
-  registerAdminOnboardingRoutes(app);
+registerAdminOnboardingRoutes(app);
 registerAdminMakerspaceRoutes(app);
 registerMachineRoutes(app);
 registerMachineCertificationRoutes(app);
 registerJoinRoutes(app);
 registerMemberRoutes(app);
 registerKnowledgeRoutes(app);
+registerAuthRoutes(app);
+registerScheduleCertificationRoutes(app);
 
 
   app.get("/api/users", async (_req, res) => {

@@ -16,7 +16,7 @@ export function registerMachineRoutes(app: any) {
     try {
       console.log("HIT POST /api/admin/machines");
 
-      const userId = req.user?.id ?? "dev-user";
+      const userId = req.session?.userId ?? req.user?.id;
       const body = req.body;
 
       const adminView = await storage.getAdminMakerspaceByUserId(userId);
@@ -28,43 +28,64 @@ export function registerMachineRoutes(app: any) {
       }
 
       const makerspaceId = adminView.makerspace.id;
-
+      const quantity = Math.max(1, Number(req.body.quantity ?? 1));
       const existingMachines =
         await storage.getMachinesByMakerspaceId(makerspaceId);
 
-      const baseSlug = slugify(body.name || "machine");
-      let candidateSlug = baseSlug;
-      let counter = 2;
-
-      while (existingMachines.some((m) => m.slug === candidateSlug)) {
-        candidateSlug = `${baseSlug}-${counter}`;
-        counter += 1;
-      }
-
-      const now = nowIso();
-
-      const machine: MachineRecord = {
-        id: createId("machine"),
-        makerspaceId,
-        name: body.name?.trim() || "Unnamed Machine",
-        slug: candidateSlug,
-        type: body.type?.trim() || "other",
-        brand: body.brand?.trim() || undefined,
-        model: body.model?.trim() || undefined,
-        locationLabel: body.locationLabel?.trim() || "Unassigned",
-        description: body.description?.trim() || "",
-        imageUrl: body.imageUrl?.trim() || undefined,
-        requiresCertification: !!body.requiresCertification,
-        status: "active",
-        catalogSourceId:
-          typeof body.catalogSourceId === "number" ? body.catalogSourceId : undefined,
-        createdAt: now,
-        updatedAt: now,
-      };;
-
-      await storage.createMachine(machine);
-
-      return res.status(201).json({ machine });
+        const now = nowIso();
+        const baseName = body.name?.trim() || "Unnamed Machine";
+        const baseSlug = slugify(baseName || "machine");
+        
+        const createdMachines: MachineRecord[] = [];
+        
+        let slugCounter = 1;
+        
+        for (let i = 1; i <= quantity; i += 1) {
+          const displayName = quantity > 1 ? `${baseName} #${i}` : baseName;
+        
+          let candidateSlug =
+            quantity > 1
+              ? `${baseSlug}-${i}`
+              : baseSlug;
+        
+          while (
+            existingMachines.some((m) => m.slug === candidateSlug) ||
+            createdMachines.some((m) => m.slug === candidateSlug)
+          ) {
+            slugCounter += 1;
+            candidateSlug = `${baseSlug}-${slugCounter}`;
+          }
+        
+          const machine: MachineRecord = {
+            id: createId("machine"),
+            makerspaceId,
+            name: displayName,
+            slug: candidateSlug,
+            type: body.type?.trim() || "other",
+            brand: body.brand?.trim() || undefined,
+            model: body.model?.trim() || undefined,
+            locationLabel: body.locationLabel?.trim() || "Unassigned",
+            description: body.description?.trim() || "",
+            imageUrl: body.imageUrl?.trim() || undefined,
+            requiresCertification: !!body.requiresCertification,
+            status: "active",
+            catalogSourceId:
+              typeof body.catalogSourceId === "number"
+                ? body.catalogSourceId
+                : undefined,
+            createdAt: now,
+            updatedAt: now,
+          };
+        
+          const createdMachine = await storage.createMachine(machine);
+        
+          createdMachines.push(createdMachine);
+        }
+        
+        return res.status(201).json({
+          machine: createdMachines[0],
+          machines: createdMachines,
+        });
     } catch (error) {
       console.error("Failed to create machine:", error);
       return res.status(500).json({
@@ -79,7 +100,7 @@ export function registerMachineRoutes(app: any) {
    */
   app.get("/api/admin/machines", async (req: any, res: any) => {
     try {
-      const userId = req.user?.id ?? "dev-user";
+      const userId = req.session?.userId ?? req.user?.id;
 
       const adminView = await storage.getAdminMakerspaceByUserId(userId);
 

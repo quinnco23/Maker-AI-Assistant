@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useRoute } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -23,22 +23,25 @@ import {
 } from "lucide-react";
 import { useTheme } from "@/lib/theme-context";
 
-function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
-  return (
-    <Button
-      size="icon"
-      variant="ghost"
-      onClick={toggleTheme}
-      data-testid="button-theme-toggle"
-      aria-label="Toggle theme"
-    >
-      {theme === "light" ? <Moon /> : <Sun />}
-    </Button>
-  );
-}
+
+// function ThemeToggle() {
+//   const { theme, toggleTheme } = useTheme();
+//   return (
+//     <Button
+//       size="icon"
+//       variant="ghost"
+//       onClick={toggleTheme}
+//       data-testid="button-theme-toggle"
+//       aria-label="Toggle theme"
+//     >
+//       {theme === "light" ? <Moon /> : <Sun />}
+//     </Button>
+//   );
+// }
 
 export default function Landing() {
+  const [, params] = useRoute("/join/:slug");
+const slug = params?.slug;
   useEffect(() => {
     document.title = "MakerMatic is AI driven virtual Makerspace mentor and community";
     const desc = "Makerspace AI Assistant gives members step-by-step guidance on high-use tools while enforcing pre-flight checklists and escalating to staff when risk is detected.";
@@ -65,7 +68,7 @@ export default function Landing() {
           </Link>
           
           <div className="flex items-center gap-2 flex-wrap">
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
             <Link href="/signin">
               <Button variant="ghost" data-testid="link-signin">
                 Sign In
@@ -92,22 +95,25 @@ export default function Landing() {
             Built by Makers, for Makers.
           </Badge>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl ">
-            AI Driven Makerspace Mentor and Community
+            AI Driven Makerspace ToolS and Community
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
             MakerMatic gives you and your members the tools to create a Makerspace of excellence.Let MakerMatic do the hard work so your Space can focus on making cool stuff!
           </p>
           <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
             <Link href="/signup">
-              <Button size="lg" data-testid="button-create-makerspace">
+              <Button size="lg" data-testid="button-create-makerspace" className="btn btn-primary">
                 Create a Makerspace
               </Button>
             </Link>
-            <Link href="/app/member/home">
-              <Button size="lg" variant="outline" data-testid="button-try-demo">
-                Join A Makerspace
-              </Button>
-            </Link>
+            <Link href="/discover">
+  <Button variant="outline">Join a Makerspace</Button>
+</Link>
+            <Link href="/signin">
+  <Button size="lg" variant="outline">
+    Member Sign In
+  </Button>
+</Link>
           </div>
         </div>
       </section>
@@ -163,7 +169,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="bg-muted/40">
+      {/* <section className="bg-muted/40">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight">
@@ -212,7 +218,7 @@ export default function Landing() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="mx-auto max-w-6xl px-6 py-20">
         <div className="text-center">

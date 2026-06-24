@@ -164,6 +164,7 @@ export default function ReviewPublishPage() {
       });
   
       console.log("publish response status:", res.status);
+      console.log("Calling onboarding publish...");
   
       if (!res.ok) {
         throw new Error("Failed to publish setup");
@@ -173,6 +174,7 @@ export default function ReviewPublishPage() {
       console.log("publish response data:", data);
   
       localStorage.setItem("makerspace_published", JSON.stringify(data));
+      
   
       setLocation("/app/admin/onboarding/invite");
     } catch (error) {

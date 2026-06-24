@@ -76,37 +76,86 @@ const certificationTemplates: CertificationTemplate[] = [
   {
     id: "prusa-mk4s-operator-badge",
     title: "Prusa MK4S Operator Badge",
-    description:
-      "A gamified beginner certification for safe operation, first-layer checks, print removal, and reset procedures.",
-    machineTypes: ["3d_printer"],
+    description: "Beginner certification for safe Prusa MK4S operation.",
+    machineTypes: ["3d_printer", "3D Printing"],
     estimatedMinutes: 8,
     passingScore: 80,
-    levels: 5,
-    tags: ["3D Printing", "Beginner Friendly", "Gamified"],
+    levelsCount: 5,
+    tags: ["3D Printing", "Beginner"],
   },
   {
     id: "laser-cutter-safety-core",
     title: "Laser Cutter Safety Core",
-    description:
-      "Safety-first certification covering approved materials, fire watch, startup, operation, and shutdown procedures.",
-    machineTypes: ["laser_cutter"],
-    estimatedMinutes: 10,
-    passingScore: 85,
-    levels: 6,
-    tags: ["Laser", "Safety", "Required"],
-  },
-  {
-    id: "cnc-router-foundations",
-    title: "CNC Router Foundations",
-    description:
-      "Introductory certification for workholding, startup checks, safe cutting workflow, and emergency response.",
-    machineTypes: ["cnc_router"],
+    description: "Safety-first laser cutter certification.",
+    machineTypes: ["laser_cutter", "Laser"],
     estimatedMinutes: 12,
     passingScore: 85,
-    levels: 6,
-    tags: ["CNC", "Operations", "Safety"],
+    levelsCount: 6,
+    tags: ["Laser", "Safety"],
+  },
+  {
+    id: "cnc-router-safety-core",
+    title: "CNC Router Safety Core",
+    description: "Intro certification for CNC router safety, setup, hold-downs, and emergency stop.",
+    machineTypes: ["cnc_router", "CNC Router", "CNC"],
+    estimatedMinutes: 15,
+    passingScore: 85,
+    levelsCount: 7,
+    tags: ["CNC", "Router", "Safety"],
+  },
+  {
+    id: "cnc-mill-basic-operator",
+    title: "CNC Mill Basic Operator",
+    description: "Beginner certification for CNC mill setup, workholding, tool awareness, and safe operation.",
+    machineTypes: ["cnc_mill", "CNC Mill", "CNC"],
+    estimatedMinutes: 18,
+    passingScore: 85,
+    levelsCount: 7,
+    tags: ["CNC", "Mill", "Operator"],
+  },
+  {
+    id: "waterjet-cutter-safety-core",
+    title: "Waterjet Cutter Safety Core",
+    description: "Safety certification for waterjet setup, material handling, piercing, and shutdown.",
+    machineTypes: ["waterjet", "Waterjet Cutter"],
+    estimatedMinutes: 15,
+    passingScore: 85,
+    levelsCount: 6,
+    tags: ["Waterjet", "Safety"],
+  },
+  {
+    id: "vinyl-cutter-basic-operator",
+    title: "Vinyl Cutter Basic Operator",
+    description: "Beginner certification for vinyl cutter setup, blade depth, material loading, and weeding.",
+    machineTypes: ["vinyl_cutter", "Vinyl Cutter"],
+    estimatedMinutes: 8,
+    passingScore: 80,
+    levelsCount: 4,
+    tags: ["Vinyl", "Beginner"],
+  },
+  {
+    id: "sewing-machine-basic-operator",
+    title: "Sewing Machine Basic Operator",
+    description: "Basic sewing machine certification for threading, needle safety, fabric handling, and cleanup.",
+    machineTypes: ["sewing_machine", "Textiles"],
+    estimatedMinutes: 10,
+    passingScore: 80,
+    levelsCount: 5,
+    tags: ["Textiles", "Beginner"],
+  },
+  {
+    id: "woodshop-tool-safety-core",
+    title: "Woodshop Tool Safety Core",
+    description: "General certification for woodshop PPE, dust collection, safe cuts, and tool readiness.",
+    machineTypes: ["woodshop", "Table Saw", "Bandsaw", "Miter Saw"],
+    estimatedMinutes: 15,
+    passingScore: 85,
+    levelsCount: 6,
+    tags: ["Woodshop", "Safety"],
   },
 ];
+
+
 
 function StepProgress() {
   const steps = ["Welcome", "Makerspace", "Machine", "Certification", "Review", "Invite"];
@@ -149,6 +198,8 @@ function getMachineIcon(type?: MachineType) {
       return <Wrench className="h-5 w-5" />;
   }
 }
+
+
 
 export default function CreateCertificationPage() {
   const [, setLocation] = useLocation();

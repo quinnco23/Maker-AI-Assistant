@@ -2,92 +2,159 @@ import { useEffect, useMemo, useState } from "react";
 import { useRoute, useLocation } from "wouter";
 import { CertificationShell } from "@/features/certifications/data/components/CertificationShell";
 import { useCertificationEngine } from "@/features/hooks/useCertificationEngine";
-import { prusaMk4sCertificationModule } from "@/features/certifications/data/prusa-mk4s";
+import { ScheduleStaffReviewStep } from "@/features/certifications/ScheduleStaffReviewStep";
 
 export default function PrusaCertificationPage() {
-  const [, params] = useRoute("/app/member/training/:machineId");
+  const [, params] = useRoute("/app/member/training/:moduleId");
+  const moduleId = params?.moduleId;
   const [, setLocation] = useLocation();
-  const machineId = params?.machineId;
 
-  const module = useMemo(() => {
-    return prusaMk4sCertificationModule;
-  }, [machineId]);
-
-  const engine = useCertificationEngine(module, {
-    storageKey: `certification-${machineId ?? "unknown"}`,
-  });
-
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [moduleRecord, setModuleRecord] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showScheduleReview, setShowScheduleReview] = useState(false);
+  const [me, setMe] = useState<any>(null);
   useEffect(() => {
-    async function submitCompletion() {
-      if (!engine.completed || hasSubmitted || isSubmitting) return;
-
+    async function loadMe() {
       try {
-        setIsSubmitting(true);
-
-        const maxPossibleScore = engine.levels.reduce((sum, level) => sum + level.xp, 0);
-        const percentScore =
-          maxPossibleScore > 0
-            ? Math.round((engine.totalScore / maxPossibleScore) * 100)
-            : 0;
-
-        const res = await fetch(`/api/member/certifications/${module.id}/complete`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+        const res = await fetch("/api/auth/me", {
           credentials: "include",
-          body: JSON.stringify({
-            machineId,
-            score: percentScore,
-            passed: engine.passed,
-            answersJson: engine.levelResults,
-          }),
+        });
+  
+        const json = await res.json();
+        setMe(json);
+      } catch (error) {
+        console.error("Failed to load current user:", error);
+      }
+    }
+  
+    loadMe();
+  }, []);
+  useEffect(() => {
+    async function loadModule() {
+      try {
+        setIsLoading(true);
+
+        const res = await fetch(`/api/member/certifications/${moduleId}`, {
+          credentials: "include",
+          headers: {
+            
+          },
         });
 
         if (!res.ok) {
-          throw new Error("Failed to save certification completion");
+          throw new Error("Failed to load certification module");
         }
 
         const json = await res.json();
-        console.log("certification completion saved:", json);
-
-        setHasSubmitted(true);
+        setModuleRecord(json.module);
       } catch (error) {
-        console.error("Failed to submit certification completion:", error);
+        console.error("Failed to load certification module:", error);
+        setModuleRecord(null);
       } finally {
-        setIsSubmitting(false);
+        setIsLoading(false);
       }
     }
 
-    submitCompletion();
-  }, [
-    engine.completed,
-    engine.passed,
-    engine.totalScore,
-    engine.levelResults,
-    engine.levels,
-    hasSubmitted,
-    isSubmitting,
-    machineId,
-    module.id,
-  ]);
+    if (moduleId) {
+      loadModule();
+    }
+  }, [moduleId]);
 
-  return (
-    <main className="min-h-screen bg-neutral-100 p-6">
-      <CertificationShell engine={engine} />
-      {engine.completed && (
-        <div className="mx-auto mt-4 max-w-4xl">
+  // ✅ moduleContent must be BEFORE useCertificationEngine
+  const moduleContent = moduleRecord?.contentJson ?? null;
+  const userId = me?.user?.id ?? "guest";
+
+  const baseEngine = useCertificationEngine(
+    moduleContent ?? {
+      id: "loading",
+      title: "Loading...",
+      version: "1.0.0",
+      passingScore: 80,
+      estimatedMinutes: 0,
+      levels: [],
+    },
+    {
+      storageKey: `member-certification-${userId}-${moduleId}`,
+    },
+  );
+
+  const engine = {
+    ...baseEngine,
+    module: moduleContent,
+    onSubmitCertification: async ({ score, passed, levelResults }: any) => {
+      const res = await fetch(`/api/member/certifications/${moduleId}/complete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          score,
+          passed,
+          answersJson: levelResults,
+          reviewStatus: "pending_review",
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to submit certification");
+      }
+
+      setShowScheduleReview(true);
+    },
+  };
+
+  if (isLoading) {
+    return <div>Loading certification...</div>;
+  }
+
+  if (showScheduleReview) {
+    return (
+      <ScheduleStaffReviewStep
+        moduleId={moduleId!}
+        machineId={moduleRecord?.machineId ?? null}
+        onDone={() => setLocation("/app/member/home")}
+      />
+    );
+  }
+
+  if (!moduleRecord || !moduleContent) {
+    return <div>Could not load certification.</div>;
+  }
+
+  if (showScheduleReview) {
+    return (
+      <main className="min-h-screen bg-neutral-100 p-6">
+        <div className="mx-auto max-w-3xl rounded-2xl border bg-white p-6 shadow-sm">
+          <p className="text-sm font-medium text-neutral-500">Final Step</p>
+
+          <h1 className="mt-2 text-3xl font-bold text-neutral-900">
+            Schedule your in-person review
+          </h1>
+
+          <p className="mt-4 text-neutral-600">
+            You passed the online certification. A staff member must verify your
+            machine setup, operation, shutdown, and safety before your certification
+            becomes active.
+          </p>
+
           <button
-            onClick={() => setLocation("/app/member/home")}
-            className="rounded-xl border bg-white px-4 py-2 text-sm font-medium hover:bg-neutral-50"
+            className="mt-6 rounded-xl bg-neutral-900 px-4 py-2 text-white"
+            onClick={() => {
+              setLocation("/app/member/home");
+            }}
           >
             Back to Dashboard
           </button>
         </div>
-      )}
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-neutral-100 p-6">
+      <CertificationShell engine={engine} />
     </main>
   );
 }

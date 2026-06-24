@@ -1,0 +1,190 @@
+{
+    "id": "prusa-mk4s-cert-v1",
+    "title": "Prusa MK4S Operator Badge",
+    "subtitle": "Safe setup, first print, and quality checks",
+    "machineType": "3d_printer",
+    "version": "1.0.0",
+    "passingScore": 80,
+    "estimatedMinutes": 8,
+    "levels": [
+      {
+        "id": "intro-lesson",
+        "type": "lesson",
+        "title": "Welcome to the Prusa MK4S",
+        "shortTitle": "Intro",
+        "xp": 10,
+        "narrative": [
+          "The Prusa MK4S is a reliable fused-filament 3D printer used for rapid prototyping and finished parts.",
+          "Before printing, always check the machine status, confirm the correct filament is loaded, and inspect the bed surface.",
+          "Your goal in this certification is to learn safe startup, first-layer quality checks, and basic troubleshooting."
+        ],
+        "media": {
+          "kind": "image",
+          "url": "/images/certifications/prusa-mk4s/intro-overview.jpg",
+          "alt": "Prusa MK4S overview"
+        },
+        "callouts": [
+          "Never start a print on a dirty build plate.",
+          "Do not leave the first layer unchecked.",
+          "Stop the machine if filament is tangled or the nozzle collides."
+        ],
+        "keyTakeaways": [
+          "Know the machine before starting.",
+          "Check bed, filament, and slicer profile.",
+          "Watch the first layer closely."
+        ],
+        "ctaLabel": "Start training"
+      },
+      {
+        "id": "startup-scenario",
+        "type": "scenario",
+        "title": "Before You Press Print",
+        "shortTitle": "Startup",
+        "xp": 20,
+        "prompt": "You are preparing a print on the MK4S. What is the best first action?",
+        "situation": "The bed has fingerprints on it, filament is loaded, and the print file is ready.",
+        "choices": [
+          {
+            "id": "start-immediately",
+            "label": "Start the print immediately since the file is ready.",
+            "isCorrect": false,
+            "feedback": "Not quite. A dirty bed can cause first-layer adhesion problems."
+          },
+          {
+            "id": "clean-bed",
+            "label": "Clean the build plate before starting the print.",
+            "isCorrect": true,
+            "feedback": "Correct. Cleaning the build plate is one of the most important pre-print checks."
+          },
+          {
+            "id": "increase-temp",
+            "label": "Raise nozzle temperature first to improve adhesion.",
+            "isCorrect": false,
+            "feedback": "Temperature matters, but bed cleanliness is the priority in this situation."
+          }
+        ]
+      },
+      {
+        "id": "hotspot-bed-check",
+        "type": "hotspot",
+        "title": "Spot the First-Layer Problems",
+        "shortTitle": "Layer Check",
+        "xp": 25,
+        "prompt": "Tap the areas that would make you stop and inspect the print.",
+        "imageUrl": "/images/certifications/prusa-mk4s/first-layer-check.jpg",
+        "imageAlt": "First layer quality check on Prusa MK4S bed",
+        "hotspots": [
+          {
+            "id": "lifted-corner",
+            "x": 18,
+            "y": 72,
+            "radius": 8,
+            "label": "Lifted corner",
+            "isCorrect": true,
+            "feedback": "Correct. A lifted corner suggests poor bed adhesion."
+          },
+          {
+            "id": "gapped-lines",
+            "x": 52,
+            "y": 41,
+            "radius": 8,
+            "label": "Visible gaps between lines",
+            "isCorrect": true,
+            "feedback": "Correct. Gaps in the first layer can indicate poor Z height or adhesion."
+          },
+          {
+            "id": "smooth-area",
+            "x": 78,
+            "y": 28,
+            "radius": 8,
+            "label": "Smooth, even layer area",
+            "isCorrect": false,
+            "feedback": "This area looks acceptable and would not be your first reason to stop."
+          }
+        ],
+        "minCorrect": 2
+      },
+      {
+        "id": "quick-check-safety",
+        "type": "quick_check",
+        "title": "Quick Safety Check",
+        "shortTitle": "Safety",
+        "xp": 20,
+        "questions": [
+          {
+            "id": "q1",
+            "prompt": "What should you do if the first layer is not sticking?",
+            "choices": [
+              {
+                "id": "q1a",
+                "label": "Let it continue for a while and see if it fixes itself.",
+                "isCorrect": false
+              },
+              {
+                "id": "q1b",
+                "label": "Stop the print, inspect the bed, and correct the issue.",
+                "isCorrect": true
+              },
+              {
+                "id": "q1c",
+                "label": "Ignore it if only one corner is lifting.",
+                "isCorrect": false
+              }
+            ],
+            "explanation": "First-layer issues usually get worse, not better. Stop early and fix the cause."
+          },
+          {
+            "id": "q2",
+            "prompt": "Which material is usually easiest for beginners to print on the Prusa MK4S?",
+            "choices": [
+              {
+                "id": "q2a",
+                "label": "PLA",
+                "isCorrect": true
+              },
+              {
+                "id": "q2b",
+                "label": "Nylon",
+                "isCorrect": false
+              },
+              {
+                "id": "q2c",
+                "label": "Polycarbonate",
+                "isCorrect": false
+              }
+            ],
+            "explanation": "PLA is generally the best starting material because it is easier to print and troubleshoot."
+          }
+        ]
+      },
+      {
+        "id": "final-scenario",
+        "type": "scenario",
+        "title": "Ready to Run",
+        "shortTitle": "Final Check",
+        "xp": 25,
+        "prompt": "You cleaned the bed, loaded the right filament, sliced with the correct profile, and started the print. What should you do next?",
+        "situation": "The print has just started and the nozzle is laying down the first lines.",
+        "choices": [
+          {
+            "id": "walk-away",
+            "label": "Walk away immediately since the print file is known-good.",
+            "isCorrect": false,
+            "feedback": "Not yet. The first layer is the most important moment to observe."
+          },
+          {
+            "id": "watch-first-layer",
+            "label": "Watch the first layer for the first few minutes and confirm it is smooth and sticking well.",
+            "isCorrect": true,
+            "feedback": "Correct. Always watch the first layer before leaving the machine."
+          },
+          {
+            "id": "increase-speed",
+            "label": "Increase print speed right away to save time.",
+            "isCorrect": false,
+            "feedback": "That increases risk. Confirm a stable first layer before changing settings."
+          }
+        ]
+      }
+    ]
+  }

@@ -36,7 +36,7 @@ export function registerJoinRoutes(app: any) {
       }
 
       // Temporary dev fallback until auth is fully wired
-      const userId = req.user?.id ?? "member-user";
+      const userId = req.session?.userId ?? req.user?.id ?? "member-user";
 
       let user = await storage.getUserById(userId);
 

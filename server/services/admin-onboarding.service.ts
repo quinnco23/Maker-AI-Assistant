@@ -15,6 +15,7 @@ import {
 } from "../db/schema.js";
 
 import { storage } from "../storage.js";
+import prusaCert from "../../server/certifications/prusa-mk4s.json" assert { type: "json" };
 
 export type PublishOnboardingRequest = {
   makerspace: {
@@ -41,7 +42,8 @@ export type PublishOnboardingRequest = {
     title?: string;
     estimatedMinutes?: number;
     passingScore?: number;
-    contentJson?: unknown;
+    contentJson:null;
+  
   };
 };
 
@@ -175,19 +177,32 @@ export async function publishAdminOnboarding({
   ) {
     certificationModule = {
       id: createId("certmod"),
-      makerspaceId: makerspace.id,
-      machineId: machine.id,
-      title:
-        payload.certification.title?.trim() ||
-        `${machine.name} Certification`,
-      mode: payload.certification.mode,
-      templateId: payload.certification.templateId || null,
-      contentJson: payload.certification.contentJson ?? null,
-      estimatedMinutes: payload.certification.estimatedMinutes ?? null,
-      passingScore: payload.certification.passingScore ?? null,
-      isPublished: true,
-      createdAt: now,
-      updatedAt: now,
+  makerspaceId: makerspace.id,
+  machineId: machine.id,
+  title:
+    payload.certification.title?.trim() ||
+    `${machine.name} Certification`,
+  description: "",
+  version: "1.0.0",
+  sourceType:
+    payload.certification.mode === "template" ||
+    payload.certification.mode === "duplicate" ||
+    payload.certification.mode === "custom"
+      ? payload.certification.mode
+      : "custom",
+  sourceTemplateId: payload.certification.templateId || null,
+  status: "published",
+  contentJson:
+    payload.certification.mode === "template"
+      ? prusaCert
+      : payload.certification.contentJson ?? null,
+  estimatedMinutes: payload.certification.estimatedMinutes ?? null,
+  passingScore: payload.certification.passingScore ?? null,
+  expiresInDays: null,
+  isRequired: true,
+  isPublished: true,
+  createdAt: now,
+  updatedAt: now,
     };
 
     await storage.createCertificationModule(certificationModule);
@@ -198,6 +213,8 @@ export async function publishAdminOnboarding({
       certificationModuleId: certificationModule.id,
       required: true,
       createdAt: now,
+      
+      
     };
 
     await storage.createMachineCertification(machineCertification);

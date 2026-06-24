@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { UserPlus, Users } from "lucide-react";
+import { useState,  } from "react";
+import { UserPlus, Users, } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogTrigger,
+  
 } from "@/components/ui/dialog";
 import {
   Table,
@@ -19,6 +20,7 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -92,6 +94,10 @@ export default function AdminMembers() {
           <p className="text-muted-foreground mt-1">
             Manage member accounts, roles, and certification status.
           </p>
+          <a href="/app/admin/certification-approvals">
+  Certification Approvals
+</a>
+
         </div>
         <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
           <DialogTrigger asChild>

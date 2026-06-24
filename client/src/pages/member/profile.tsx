@@ -43,7 +43,7 @@ export default function MemberProfile() {
   });
 
   return (
-    <div className="p-6 max-w-3xl mx-auto space-y-8">
+    <div className=" max-w-3xl mx-auto space-y-8">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Profile</h1>
         <p className="text-muted-foreground mt-1">

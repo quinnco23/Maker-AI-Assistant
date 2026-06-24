@@ -140,7 +140,8 @@ function getTypeLabel(type: MachineType | "") {
 
 export default function CreateMachinePage() {
   const [, setLocation] = useLocation();
-
+  
+  
   const [values, setValues] = React.useState<MachineFormValues>({
     name: "",
     type: "3d_printer",
@@ -150,11 +151,14 @@ export default function CreateMachinePage() {
     description: "",
     imageFile: null,
     requiresCertification: true,
+    
   });
 
   const [errors, setErrors] = React.useState<MachineFormErrors>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [imagePreviewUrl, setImagePreviewUrl] = React.useState("");
+  const [quantity, setQuantity] = React.useState(1);
+  
 
   React.useEffect(() => {
     return () => {
@@ -218,6 +222,7 @@ export default function CreateMachinePage() {
             locationLabel: values.locationLabel,
             description: values.description,
             requiresCertification: values.requiresCertification,
+            quantity
           },
         }),
       );
@@ -328,6 +333,22 @@ export default function CreateMachinePage() {
                     />
                   </div>
                 </div>
+                <div className="space-y-2">
+  <Label htmlFor="quantity">Quantity</Label>
+
+  <Input
+    id="quantity"
+    type="number"
+    min={1}
+    max={50}
+    value={quantity}
+    onChange={(e) => setQuantity(Number(e.target.value))}
+  />
+
+  <p className="text-sm text-slate-500">
+    Number of identical machines in your makerspace.
+  </p>
+</div>
 
                 <div className="space-y-2">
                   <Label htmlFor="locationLabel">Location in space</Label>

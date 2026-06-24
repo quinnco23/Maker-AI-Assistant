@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Settings, AlertTriangle } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,10 +15,20 @@ import {
 } from "@/components/ui/select";
 
 export default function AdminSettings() {
-  const [name, setName] = useState("Downtown Makerspace");
-  const [description, setDescription] = useState(
-    "A community workshop with laser cutters, 3D printers, and electronics workbenches."
-  );
+
+  const [isLoading, setIsLoading] = useState(true);
+const [isSaving, setIsSaving] = useState(false);
+const [message, setMessage] = useState("");
+
+const [name, setName] = useState("");
+const [location, setLocation] = useState("");
+const [website, setWebsite] = useState("");
+const [description, setDescription] = useState("");
+const [logoUrl, setLogoUrl] = useState("");
+  // const [name, setName] = useState("Downtown Makerspace");
+  // const [description, setDescription] = useState(
+  //   "A community workshop with laser cutters, 3D printers, and electronics workbenches."
+  // );
   const [retention, setRetention] = useState("90-days");
   const [notifications, setNotifications] = useState({
     escalations: true,
@@ -27,8 +37,77 @@ export default function AdminSettings() {
     weeklyReport: false,
   });
 
+  useEffect(() => {
+    async function loadMakerspace() {
+      try {
+        setIsLoading(true);
+  
+        const res = await fetch("/api/admin/makerspace", {
+          credentials: "include",
+        });
+  
+        const json = await res.json();
+  
+        if (!res.ok) {
+          throw new Error(json.message || "Failed to load makerspace");
+        }
+  
+        const makerspace = json.makerspace;
+  
+        setName(makerspace.name ?? "");
+        setLocation(makerspace.location ?? "");
+        setWebsite(makerspace.website ?? "");
+        setDescription(makerspace.description ?? "");
+        setLogoUrl(makerspace.logoUrl ?? "");
+      } catch (error) {
+        console.error("Failed to load makerspace:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  
+    loadMakerspace();
+  }, []);
+
+  async function handleSaveDetails() {
+    try {
+      setIsSaving(true);
+      setMessage("");
+  
+      const res = await fetch("/api/admin/makerspace", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name,
+          location,
+          website,
+          description,
+          logoUrl,
+        }),
+      });
+  
+      const json = await res.json();
+  
+      if (!res.ok) {
+        throw new Error(json.message || "Failed to save makerspace");
+      }
+  
+      setMessage("Makerspace settings saved");
+    } catch (error) {
+      console.error("Failed to save makerspace:", error);
+      setMessage(
+        error instanceof Error ? error.message : "Failed to save makerspace",
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
   return (
-    <div className="p-6 max-w-3xl mx-auto space-y-8">
+    <div className=" max-w-3xl mx-auto space-y-8">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" data-testid="text-page-title">
           Settings
@@ -39,30 +118,80 @@ export default function AdminSettings() {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Makerspace Details</CardTitle>
-          <CardDescription>Basic information about your makerspace.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Makerspace Name</label>
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              data-testid="input-makerspace-name"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Description</label>
-            <Textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              data-testid="input-makerspace-description"
-            />
-          </div>
-          <Button data-testid="button-save-details">Save Changes</Button>
-        </CardContent>
-      </Card>
+  <CardHeader>
+    <CardTitle className="text-base">Makerspace Profile</CardTitle>
+    <CardDescription>
+      This information appears on your member portal and public join page.
+    </CardDescription>
+  </CardHeader>
+
+  <CardContent className="space-y-4">
+    {message && (
+      <div className="rounded-xl bg-slate-100 px-4 py-3 text-sm text-slate-700">
+        {message}
+      </div>
+    )}
+
+    <div className="flex items-center gap-4">
+      <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-slate-100 text-sm font-semibold text-slate-500">
+        {logoUrl ? (
+          <img
+            src={logoUrl}
+            alt={name}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          "Logo"
+        )}
+      </div>
+
+      <div className="flex-1 space-y-2">
+        <label className="text-sm font-medium">Profile Photo / Logo URL</label>
+        <Input
+          value={logoUrl}
+          onChange={(e) => setLogoUrl(e.target.value)}
+          placeholder="https://example.com/logo.png"
+        />
+      </div>
+    </div>
+
+    <div className="space-y-2">
+      <label className="text-sm font-medium">Makerspace Name</label>
+      <Input value={name} onChange={(e) => setName(e.target.value)} />
+    </div>
+
+    <div className="space-y-2">
+      <label className="text-sm font-medium">Location</label>
+      <Input
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+        placeholder="Santa Cruz, CA"
+      />
+    </div>
+
+    <div className="space-y-2">
+      <label className="text-sm font-medium">Website</label>
+      <Input
+        value={website}
+        onChange={(e) => setWebsite(e.target.value)}
+        placeholder="https://yourmakerspace.org"
+      />
+    </div>
+
+    <div className="space-y-2">
+      <label className="text-sm font-medium">Description</label>
+      <Textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Describe your makerspace..."
+      />
+    </div>
+
+    <Button onClick={handleSaveDetails} disabled={isSaving}>
+      {isSaving ? "Saving..." : "Save Changes"}
+    </Button>
+  </CardContent>
+</Card>
 
       <Card>
         <CardHeader>

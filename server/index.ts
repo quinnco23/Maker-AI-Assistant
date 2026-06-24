@@ -1,6 +1,9 @@
 import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 
+//import express from "express";
+import { setupAuth } from "./auth";
+
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
@@ -62,7 +65,10 @@ app.use((req, res, next) => {
   next();
 });
 
+setupAuth(app);
+
 (async () => {
+
   await registerRoutes(httpServer, app);
 
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
@@ -96,8 +102,7 @@ app.use((req, res, next) => {
   httpServer.listen(
     {
       port,
-      host: "0.0.0.0",
-      reusePort: true,
+      host: "127.0.0.1",
     },
     () => {
       log(`serving on port ${port}`);

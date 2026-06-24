@@ -11,7 +11,12 @@ import type {
   MakerspaceRecord,
   UserCertificationRecord,
   UserRecord,
+  
 } from "./db/schema.js";
+
+import { nowIso } from "./db/schema";
+
+
 
 export const storage = {
   async getUsers(): Promise<UserRecord[]> {
@@ -36,51 +41,54 @@ export const storage = {
         email,
         full_name as "fullName",
         avatar_url as "avatarUrl",
+        bio,
+        phone,
         created_at as "createdAt",
         updated_at as "updatedAt"
       from users
       where id = ${userId}
       limit 1
     `;
+  
     return rows[0] ?? null;
   },
 
-  async getUserByEmail(email: string): Promise<UserRecord | null> {
-    const rows = await sql<UserRecord[]>`
-      select
-        id,
-        email,
-        full_name as "fullName",
-        avatar_url as "avatarUrl",
-        created_at as "createdAt",
-        updated_at as "updatedAt"
-      from users
-      where lower(email) = lower(${email})
-      limit 1
-    `;
-    return rows[0] ?? null;
-  },
+  // async getUserByEmail(email: string): Promise<UserRecord | null> {
+  //   const rows = await sql<UserRecord[]>`
+  //     select
+  //       id,
+  //       email,
+  //       full_name as "fullName",
+  //       avatar_url as "avatarUrl",
+  //       created_at as "createdAt",
+  //       updated_at as "updatedAt"
+  //     from users
+  //     where lower(email) = lower(${email})
+  //     limit 1
+  //   `;
+  //   return rows[0] ?? null;
+  // },
 
-  async createUser(user: UserRecord): Promise<UserRecord> {
-    await sql`
-      insert into users (
-        id,
-        email,
-        full_name,
-        avatar_url,
-        created_at,
-        updated_at
-      ) values (
-        ${user.id},
-        ${user.email},
-        ${user.fullName},
-        ${user.avatarUrl ?? null},
-        ${user.createdAt},
-        ${user.updatedAt}
-      )
-    `;
-    return user;
-  },
+  // async createUser(user: UserRecord): Promise<UserRecord> {
+  //   await sql`
+  //     insert into users (
+  //       id,
+  //       email,
+  //       full_name,
+  //       avatar_url,
+  //       created_at,
+  //       updated_at
+  //     ) values (
+  //       ${user.id},
+  //       ${user.email},
+  //       ${user.fullName},
+  //       ${user.avatarUrl ?? null},
+  //       ${user.createdAt},
+  //       ${user.updatedAt}
+  //     )
+  //   `;
+  //   return user;
+  // },
 
   async updateUser(
     userId: string,
@@ -88,22 +96,24 @@ export const storage = {
   ): Promise<UserRecord | null> {
     const existing = await this.getUserById(userId);
     if (!existing) return null;
-
+  
     const next = {
       ...existing,
       ...updates,
     };
-
+  
     await sql`
       update users
       set
         email = ${next.email},
         full_name = ${next.fullName},
         avatar_url = ${next.avatarUrl ?? null},
+        bio = ${next.bio ?? null},
+        phone = ${next.phone ?? null},
         updated_at = ${next.updatedAt}
       where id = ${userId}
     `;
-
+  
     return next;
   },
 
@@ -146,6 +156,8 @@ export const storage = {
         description,
         website,
         logo_url as "logoUrl",
+        onboarding_completed as "onboardingCompleted",
+      onboarding_completed_at as "onboardingCompletedAt",
         created_by_user_id as "createdByUserId",
         created_at as "createdAt",
         updated_at as "updatedAt"
@@ -166,6 +178,8 @@ export const storage = {
         description,
         website,
         logo_url as "logoUrl",
+        onboarding_completed as "onboardingCompleted",
+      onboarding_completed_at as "onboardingCompletedAt",
         created_by_user_id as "createdByUserId",
         created_at as "createdAt",
         updated_at as "updatedAt"
@@ -186,6 +200,8 @@ export const storage = {
         description,
         website,
         logo_url as "logoUrl",
+        onboarding_completed as "onboardingCompleted",
+      onboarding_completed_at as "onboardingCompletedAt",
         created_by_user_id as "createdByUserId",
         created_at as "createdAt",
         updated_at as "updatedAt"
@@ -206,6 +222,8 @@ export const storage = {
         description,
         website,
         logo_url as "logoUrl",
+        onboarding_completed as "onboardingCompleted",
+      onboarding_completed_at as "onboardingCompletedAt",
         created_by_user_id as "createdByUserId",
         created_at as "createdAt",
         updated_at as "updatedAt"
@@ -986,6 +1004,7 @@ export const storage = {
       where user_id = ${userId}
         and role in ('owner', 'admin')
         and status = 'active'
+        order by created_at desc
       limit 1
     `;
 
@@ -1022,10 +1041,492 @@ export const storage = {
       order by m.created_at asc
     `;
 
+
+    
     return {
       makerspace,
       machines,
       members,
     };
   },
+  async getMachineCertificationsByMakerspaceId(makerspaceId: string) {
+    const rows = await sql`
+      select
+        mc.id,
+        mc.machine_id as "machineId",
+        mc.certification_module_id as "certificationModuleId",
+        mc.required,
+        mc.created_at as "createdAt"
+      from machine_certifications mc
+      join machines m on m.id = mc.machine_id
+      where m.makerspace_id = ${makerspaceId}
+      order by mc.created_at desc
+    `;
+    return rows;
+  },
+
+  async getMachineCertificationById(machineCertificationId: string) {
+    const rows = await sql`
+      select
+        id,
+        machine_id as "machineId",
+        certification_module_id as "certificationModuleId",
+        required,
+        created_at as "createdAt"
+      from machine_certifications
+      where id = ${machineCertificationId}
+      limit 1
+    `;
+  
+    return rows[0] ?? null;
+  },
+
+  
+
+  async updateMachineCertification(
+    machineCertificationId: string,
+    updates: { required?: boolean },
+  ) {
+    await sql`
+      update machine_certifications
+      set
+        required = ${updates.required}
+      where id = ${machineCertificationId}
+    `;
+  
+    return {
+      id: machineCertificationId,
+      ...updates,
+    };
+  },
+
+  async getPendingCertificationApprovals(makerspaceId: string) {
+    const rows = await sql`
+      select
+        uc.id,
+        uc.user_id as "userId",
+        u.full_name as "userName",
+        u.email as "userEmail",
+        uc.certification_module_id as "certificationModuleId",
+        cm.title as "certificationTitle",
+        uc.machine_id as "machineId",
+        m.name as "machineName",
+        uc.status,
+        uc.earned_at as "earnedAt",
+        uc.expires_at as "expiresAt",
+        uc.created_at as "createdAt"
+      from user_certifications uc
+      left join users u on u.id = uc.user_id
+      left join certification_modules cm on cm.id = uc.certification_module_id
+      left join machines m on m.id = uc.machine_id
+      where uc.makerspace_id = ${makerspaceId}
+        and uc.status = 'pending_review'
+      order by uc.created_at desc
+    `;
+  
+    return rows;
+  },
+  
+  async updateUserCertificationStatus(
+    certificationId: string,
+    status: "pending_review" | "active" | "expired" | "revoked",
+  ) {
+    const rows = await sql`
+      update user_certifications
+      set status = ${status}
+      where id = ${certificationId}
+      returning
+        id,
+        makerspace_id as "makerspaceId",
+        user_id as "userId",
+        certification_module_id as "certificationModuleId",
+        machine_id as "machineId",
+        status,
+        earned_at as "earnedAt",
+        expires_at as "expiresAt",
+        created_at as "createdAt"
+    `;
+  
+    return rows[0] ?? null;
+  },
+
+
+  async getUserByEmail(email: string) {
+    const rows = await sql`
+      select
+        id,
+        email,
+        full_name as "fullName",
+        avatar_url as "avatarUrl",
+        password_hash as "passwordHash",
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+      from users
+      where lower(email) = lower(${email})
+      limit 1
+    `;
+  
+    return rows[0] ?? null;
+  },
+
+  async createUser(user: any) {
+    await sql`
+      insert into users (
+        id,
+        email,
+        full_name,
+        avatar_url,
+        password_hash,
+        created_at,
+        updated_at
+      ) values (
+        ${user.id},
+        ${user.email},
+        ${user.fullName},
+        ${user.avatarUrl ?? null},
+        ${user.passwordHash ?? null},
+        ${user.createdAt},
+        ${user.updatedAt}
+      )
+    `;
+  
+    return user;
+  },
+  async markMakerspaceOnboardingComplete(makerspaceId: string) {
+    const now = nowIso();
+  
+    const rows = await sql`
+      update makerspaces
+      set
+        onboarding_completed = true,
+        onboarding_completed_at = ${now},
+        updated_at = ${now}
+      where id = ${makerspaceId}
+      returning
+        id,
+        name,
+        slug,
+        location,
+        description,
+        website,
+        logo_url as "logoUrl",
+        created_by_user_id as "createdByUserId",
+        onboarding_completed as "onboardingCompleted",
+        onboarding_completed_at as "onboardingCompletedAt",
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+    `;
+  
+    return rows[0] ?? null;
+  },
+  async createCertificationReviewRequest(request: any) {
+    const rows = await sql`
+      insert into certification_review_requests (
+        id,
+        makerspace_id,
+        user_id,
+        certification_module_id,
+        machine_id,
+        staff_user_id,
+        requested_date,
+        requested_time,
+        notes,
+        status,
+        created_at,
+        updated_at
+      ) values (
+        ${request.id},
+        ${request.makerspaceId},
+        ${request.userId},
+        ${request.certificationModuleId},
+        ${request.machineId ?? null},
+        ${request.staffUserId ?? null},
+        ${request.requestedDate},
+        ${request.requestedTime},
+        ${request.notes ?? ""},
+        ${request.status ?? "pending"},
+        ${request.createdAt},
+        ${request.updatedAt}
+      )
+      returning
+        id,
+        makerspace_id as "makerspaceId",
+        user_id as "userId",
+        certification_module_id as "certificationModuleId",
+        machine_id as "machineId",
+        staff_user_id as "staffUserId",
+        requested_date as "requestedDate",
+        requested_time as "requestedTime",
+        notes,
+        status,
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+    `;
+  
+    return rows[0] ?? null;
+  },
+  async getCertificationReviewRequestsByMakerspaceId(makerspaceId: string) {
+    const rows = await sql`
+      select
+        r.id,
+        r.makerspace_id as "makerspaceId",
+        r.user_id as "userId",
+        member.full_name as "memberName",
+        member.email as "memberEmail",
+        member.avatar_url as "memberAvatarUrl",
+  
+        r.certification_module_id as "certificationModuleId",
+        cm.title as "certificationTitle",
+  
+        r.machine_id as "machineId",
+        machine.name as "machineName",
+  
+        r.staff_user_id as "staffUserId",
+        staff.full_name as "staffName",
+        staff.email as "staffEmail",
+        staff.avatar_url as "staffAvatarUrl",
+  
+        r.requested_date as "requestedDate",
+        r.requested_time as "requestedTime",
+        r.notes,
+        r.status,
+        r.created_at as "createdAt",
+        r.updated_at as "updatedAt"
+      from certification_review_requests r
+      left join users member on member.id = r.user_id
+      left join users staff on staff.id = r.staff_user_id
+      left join certification_modules cm on cm.id = r.certification_module_id
+      left join machines machine on machine.id = r.machine_id
+      where r.makerspace_id = ${makerspaceId}
+      order by
+        case
+          when r.status = 'pending' then 1
+          when r.status = 'scheduled' then 2
+          when r.status = 'completed' then 3
+          when r.status = 'rejected' then 4
+          else 5
+        end,
+        r.requested_date asc,
+        r.requested_time asc,
+        r.created_at desc
+    `;
+  
+    return rows;
+  },
+
+  async getCertificationReviewRequestById(requestId: string) {
+    const rows = await sql`
+      select
+        id,
+        makerspace_id as "makerspaceId",
+        user_id as "userId",
+        certification_module_id as "certificationModuleId",
+        machine_id as "machineId",
+        staff_user_id as "staffUserId",
+        requested_date as "requestedDate",
+        requested_time as "requestedTime",
+        notes,
+        status,
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+      from certification_review_requests
+      where id = ${requestId}
+      limit 1
+    `;
+  
+    return rows[0] ?? null;
+  },
+  
+  async updateCertificationReviewRequestStatus(
+    requestId: string,
+    status: "pending" | "scheduled" | "completed" | "rejected",
+  ) {
+    const now = nowIso();
+  
+    const rows = await sql`
+      update certification_review_requests
+      set
+        status = ${status},
+        updated_at = ${now}
+      where id = ${requestId}
+      returning
+        id,
+        makerspace_id as "makerspaceId",
+        user_id as "userId",
+        certification_module_id as "certificationModuleId",
+        machine_id as "machineId",
+        staff_user_id as "staffUserId",
+        requested_date as "requestedDate",
+        requested_time as "requestedTime",
+        notes,
+        status,
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+    `;
+  
+    return rows[0] ?? null;
+  },
+
+  async getUserCertificationForReview(args: {
+    userId: string;
+    certificationModuleId: string;
+    machineId?: string | null;
+  }) {
+    const rows = await sql`
+      select
+        id,
+        makerspace_id as "makerspaceId",
+        user_id as "userId",
+        certification_module_id as "certificationModuleId",
+        machine_id as "machineId",
+        status,
+        earned_at as "earnedAt",
+        expires_at as "expiresAt",
+        created_at as "createdAt"
+      from user_certifications
+      where user_id = ${args.userId}
+        and certification_module_id = ${args.certificationModuleId}
+        and (
+          ${args.machineId ?? null}::text is null
+          or machine_id = ${args.machineId ?? null}
+        )
+      order by created_at desc
+      limit 1
+    `;
+  
+    return rows[0] ?? null;
+  },
+
+  async getStaffReviewersByMakerspaceId(makerspaceId: string) {
+    const rows = await sql`
+      select
+        u.id,
+        u.full_name as "fullName",
+        u.email,
+        u.avatar_url as "avatarUrl",
+        m.role
+      from memberships m
+      join users u on u.id = m.user_id
+      where m.makerspace_id = ${makerspaceId}
+        and m.status = 'active'
+        and m.role in ('owner', 'admin', 'instructor')
+      order by
+        case
+          when m.role = 'instructor' then 1
+          when m.role = 'admin' then 2
+          when m.role = 'owner' then 3
+          else 4
+        end,
+        u.full_name asc
+    `;
+  
+    return rows;
+  },
+  
+  async getCertificationReviewRequestsByUser(userId: string) {
+    const rows = await sql`
+      select
+        r.id,
+        r.makerspace_id as "makerspaceId",
+        r.user_id as "userId",
+        r.certification_module_id as "certificationModuleId",
+        cm.title as "certificationTitle",
+        r.machine_id as "machineId",
+        machine.name as "machineName",
+        r.staff_user_id as "staffUserId",
+        staff.full_name as "staffName",
+        staff.avatar_url as "staffAvatarUrl",
+        r.requested_date as "requestedDate",
+        r.requested_time as "requestedTime",
+        r.notes,
+        r.status,
+        r.created_at as "createdAt",
+        r.updated_at as "updatedAt"
+      from certification_review_requests r
+      left join certification_modules cm on cm.id = r.certification_module_id
+      left join machines machine on machine.id = r.machine_id
+      left join users staff on staff.id = r.staff_user_id
+      where r.user_id = ${userId}
+      order by r.created_at desc
+    `;
+  
+    return rows;
+  },
+  
+  async getMachineBookingsByUser(userId: string) {
+    const rows = await sql`
+      select
+        b.id,
+        b.makerspace_id as "makerspaceId",
+        b.user_id as "userId",
+        b.machine_id as "machineId",
+        machine.name as "machineName",
+        b.starts_at as "startsAt",
+        b.ends_at as "endsAt",
+        b.status,
+        b.notes,
+        b.created_at as "createdAt",
+        b.updated_at as "updatedAt"
+      from machine_bookings b
+      left join machines machine on machine.id = b.machine_id
+      where b.user_id = ${userId}
+      order by b.starts_at asc
+    `;
+  
+    return rows;
+  },
+  
+  async getPublishedAnnouncementsByMakerspaceId(makerspaceId: string) {
+    const rows = await sql`
+      select
+        id,
+        makerspace_id as "makerspaceId",
+        title,
+        body,
+        audience,
+        status,
+        published_at as "publishedAt",
+        created_at as "createdAt",
+        updated_at as "updatedAt"
+      from makerspace_announcements
+      where makerspace_id = ${makerspaceId}
+        and status = 'published'
+      order by published_at desc nulls last, created_at desc
+      limit 10
+    `;
+  
+    return rows;
+  },
+  async getPublicMakerspacesForDirectory() {
+    const rows = await sql`
+      select
+        ms.id,
+        ms.name,
+        ms.slug,
+        ms.location,
+        ms.description,
+        ms.website,
+        ms.logo_url as "logoUrl",
+        ms.created_at as "createdAt",
+        count(distinct machines.id)::int as "machineCount",
+        count(distinct memberships.id)::int as "memberCount"
+      from makerspaces ms
+      left join machines on machines.makerspace_id = ms.id
+      left join memberships on memberships.makerspace_id = ms.id
+        and memberships.status = 'active'
+      group by
+        ms.id,
+        ms.name,
+        ms.slug,
+        ms.location,
+        ms.description,
+        ms.website,
+        ms.logo_url,
+        ms.created_at
+      order by ms.created_at desc
+    `;
+  
+    return rows;
+  },
 };
+

@@ -1,6 +1,10 @@
 import "dotenv/config";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { createId, nowIso, type MakerspaceMembershipRecord, type UserRecord } from "../../../../server/db/schema.js";
+import {
+  createId,
+  nowIso,
+  type MakerspaceMembershipRecord,
+} from "../../../../server/db/schema.js";
 import { storage } from "../../../../server/storage.js";
 
 export default async function handler(
@@ -21,22 +25,21 @@ export default async function handler(
     }
 
     const userId =
-      (req as any).user?.id ||
-      (req.headers["x-dev-user-id"] as string | undefined) ||
-      "member-user";
+      (req as any).session?.userId ||
+      (req as any).user?.id;
 
-    let user = await storage.getUserById(userId);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Please sign in before joining this makerspace",
+      });
+    }
+
+    const user = await storage.getUserById(userId);
 
     if (!user) {
-      const now = nowIso();
-      const fallbackUser: UserRecord = {
-        id: userId,
-        email: `${userId}@local.dev`,
-        fullName: "Member User",
-        createdAt: now,
-        updatedAt: now,
-      };
-      user = await storage.createUser(fallbackUser);
+      return res.status(401).json({
+        message: "User session is invalid. Please sign in again.",
+      });
     }
 
     const existingMembership = await storage.getMembershipByMakerspaceAndUser(
@@ -74,7 +77,8 @@ export default async function handler(
   } catch (error) {
     console.error("Failed to join makerspace:", error);
     return res.status(500).json({
-      message: error instanceof Error ? error.message : "Failed to join makerspace",
+      message:
+        error instanceof Error ? error.message : "Failed to join makerspace",
     });
   }
 }

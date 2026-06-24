@@ -5,6 +5,7 @@ import { storage } from "../../server/storage.js";
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse,
+  
 ) {
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
@@ -12,10 +13,14 @@ export default async function handler(
   }
 
   try {
+    
     const userId =
-      (req as any).user?.id ||
-      (req.headers["x-dev-user-id"] as string | undefined) ||
-      "member-user";
+    (req as any).session?.userId ||
+    (req as any).user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
     const memberships = await storage.getMembershipsByUserId(userId);
     const membership = memberships.find((m) => m.status === "active");

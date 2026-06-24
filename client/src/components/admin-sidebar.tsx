@@ -1,4 +1,5 @@
-import { Link, useLocation } from "wouter";
+import { Link, useLocation, } from "wouter";
+import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
   Wand2,
@@ -11,6 +12,7 @@ import {
   AlertTriangle,
   BarChart3,
   Settings,
+  Warehouse
 } from "lucide-react";
 import {
   Sidebar,
@@ -29,10 +31,10 @@ import { Badge } from "@/components/ui/badge";
 
 const adminNav = [
   // { title: "Dashboard", url: "/app/admin/overview", icon: LayoutDashboard },
-  { title: "Profile", url: "/app/admin/setup", icon: Wand2 },
-  { title: "machines", url: "/app/admin/machines", icon: Wrench },
-  { title: "Members & Staff", url: "/app/admin/members", icon: BookOpen },
-  { title: "Safety", url: "/app/admin/safety", icon: Shield },
+  //{ title: "My Makerspace", url: "/app/admin/setup", icon: Warehouse},
+  //{ title: "machines", url: "/app/admin/machines", icon: Wrench },
+  //{ title: "Members & Staff", url: "/app/admin/members", icon: BookOpen },
+  //{ title: "Safety", url: "/app/admin/safety", icon: Shield },
   // { title: "Checklists", url: "/app/admin/checklists", icon: ClipboardCheck },
   // { title: "Members & Staff", url: "/app/admin/members", icon: Users },
   // { title: "Messages", url: "/app/admin/messages", icon: MessageSquare },
@@ -41,17 +43,46 @@ const adminNav = [
   { title: "Settings", url: "/app/admin/settings", icon: Settings },
 ];
 
+
+
 export function AdminSidebar() {
   const [location] = useLocation();
+  const [me, setMe] = useState<any>(null);
+
+useEffect(() => {
+  async function loadMe() {
+    try {
+      const res = await fetch("/api/auth/me", {
+        credentials: "include",
+      });
+
+      const json = await res.json();
+
+      setMe(json);
+    } catch (error) {
+      console.error("Failed to load user:", error);
+    }
+  }
+
+  loadMe();
+}, []);
 
   return (
     <Sidebar>
       <SidebarHeader>
         <Link href="/">
           <div className="flex items-center gap-2 px-2 py-1 cursor-pointer" data-testid="link-admin-logo">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground font-bold text-sm">
-              M
-            </div>
+          {me?.adminMakerspace?.logoUrl ? (
+  <img
+    src={me.adminMakerspace.logoUrl}
+    alt={me.adminMakerspace.name}
+    className="h-8 w-8 rounded-md object-cover"
+  />
+) : (
+  <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground">
+    M
+  </div>
+)}
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight">Makerspace AI</span>
               <span className="text-xs text-muted-foreground">Admin Console</span>

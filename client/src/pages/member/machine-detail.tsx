@@ -11,17 +11,28 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
+
+
 type MachineCardRecord = {
+  id: string;
+  name: string;
+  type: string;
+  brand?: string;
+  model?: string;
+  locationLabel: string;
+  description: string;
+  requiresCertification: boolean;
+  status: "active" | "inactive" | "maintenance";
+  certificationStatus:
+    | "not_required"
+    | "not_certified"
+    | "certified"
+    | "expired"
+    | "pending_review";
+  certificationProgram?: {
     id: string;
-    name: string;
-    type: string;
-    brand?: string;
-    model?: string;
-    locationLabel: string;
-    description: string;
-    requiresCertification: boolean;
-    status: "active" | "inactive" | "maintenance";
-    certificationStatus: "not_required" | "not_certified" | "certified" | "expired";
+    title?: string;
+  } | null;
 };
 
 type MemberDashboardData = {
@@ -65,6 +76,7 @@ function getCertificationLabel(status: MachineCardRecord["certificationStatus"])
 export default function MemberHome() {
     const [data, setData] = React.useState<MemberDashboardData | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
+    
 
     React.useEffect(() => {
         async function loadDashboard() {
@@ -187,11 +199,18 @@ export default function MemberHome() {
                                         </Link>
                                     </Button>
                                 ) : (
-                                    <Button asChild className="rounded-xl">
-  <Link href={`/app/member/training/${machine.id}`}>
-    Start Certification
-  </Link>
-</Button>
+                                    <Button
+                                    disabled={!machine.certificationProgram}
+                                    onClick={() => {
+                                      if (machine.certificationProgram) {
+                                        navigate(`/app/member/training/${machine.certificationProgram.id}`);
+                                      }
+                                    }}
+                                  >
+                                    {machine.certificationProgram
+                                      ? "Start Certification"
+                                      : "No Certification Available"}
+                                  </Button>
                                 )}
                             </div>
                         </CardContent>

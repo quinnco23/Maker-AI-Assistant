@@ -9,16 +9,56 @@ import { ArrowLeft, KeyRound, Mail } from "lucide-react";
 
 export default function SignUp() {
   const [, setLocation] = useLocation();
-  const [name, setName] = useState("");
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+const [makerspaceName, setMakerspaceName] = useState("");
 
   useEffect(() => {
     document.title = "Sign Up - Makerspace AI Assistant";
   }, []);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+  
+    const res = await fetch("/api/auth/admin-signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        fullName,
+        email,
+        password,
+        makerspaceName,
+      }),
+    });
+  
+    const text = await res.text();
+console.log("admin signup status:", res.status);
+console.log("admin signup raw response:", text);
+
+let json: any = {};
+try {
+  json = JSON.parse(text);
+} catch {
+  throw new Error("Server returned non-JSON response");
+}
+
+console.log("admin signup status:", res.status);
+console.log("admin signup response:", json);
+
+if (!res.ok) {
+  throw new Error(json.message || "Failed to create makerspace");
+}
+  
+    if (!res.ok) {
+      console.error(json);
+      return;
+    }
+  
     setLocation("/app/admin/onboarding");
   }
 
@@ -42,17 +82,26 @@ export default function SignUp() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Makerspace Name</Label>
-              <Input
-                id="name"
-                type="text"
-                placeholder="My Makerspace"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                data-testid="input-name"
-              />
-            </div>
+          <div className="space-y-2">
+  <Label htmlFor="fullName">Your Name</Label>
+  <Input
+    id="fullName"
+    type="text"
+    placeholder="Sky Quinn"
+    value={fullName}
+    onChange={(e) => setFullName(e.target.value)}
+  />
+</div>
+<div className="space-y-2">
+  <Label htmlFor="makerspaceName">Makerspace Name</Label>
+  <Input
+    id="makerspaceName"
+    type="text"
+    placeholder="My Makerspace"
+    value={makerspaceName}
+    onChange={(e) => setMakerspaceName(e.target.value)}
+  />
+</div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input

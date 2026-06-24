@@ -44,40 +44,39 @@ export default async function handler(
     }
 
     const machines = await storage.getMachinesByMakerspaceId(makerspace.id);
-    const userCertifications = await storage.getUserCertificationsByUser(userId);
 
+    const machineCertifications =
+      await storage.getMachineCertificationsByMakerspaceId(makerspace.id);
+    
+    const modules =
+      await storage.getCertificationModulesByMakerspaceId(makerspace.id);
+    
+    const userCertifications =
+      await storage.getUserCertificationsByUser(userId);
+    
     const machinesWithStatus = machines.map((machine) => {
+      
+      userCertifications.find((cert) => cert.machineId === machine.id) ?? null;
+      
+      const machineCert = machineCertifications.find(
+        (mc) => mc.machineId === machine.id,
+      );
+    
+      const certificationProgram = machineCert
+        ? modules.find((m) => m.id === machineCert.certificationModuleId) ?? null
+        : null;
+    
       const userCertification =
         userCertifications.find((cert) => cert.machineId === machine.id) ?? null;
-
+    
       return {
         ...machine,
+        certificationProgram,
         certificationStatus: getCertificationStatus({
           requiresCertification: machine.requiresCertification,
           userCertification,
         }),
       };
-    });
-
-    const earnedCertifications = userCertifications
-      .filter((cert) => cert.status === "active")
-      .map((cert) => {
-        const machine = machines.find((m) => m.id === cert.machineId);
-
-        return {
-          id: cert.id,
-          machineId: cert.machineId,
-          machineName: machine?.name ?? "Unknown Machine",
-          earnedAt: cert.earnedAt,
-          expiresAt: cert.expiresAt ?? null,
-          status: cert.status,
-        };
-      });
-
-    return res.status(200).json({
-      makerspace,
-      machines: machinesWithStatus,
-      earnedCertifications,
     });
   } catch (error) {
     console.error("Failed to load member makerspace:", error);

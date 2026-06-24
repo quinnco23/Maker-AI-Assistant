@@ -5,6 +5,7 @@ import { Building2, MapPin, Globe, ArrowLeft, CheckCircle2 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
+
 type Makerspace = {
   id: string;
   name: string;
@@ -29,31 +30,37 @@ export default function JoinMakerspacePage() {
 
   React.useEffect(() => {
     async function loadMakerspace() {
+      if (!slug) {
+        setError("Missing makerspace slug.");
+        setIsLoading(false);
+        return;
+      }
+  
       try {
         setIsLoading(true);
         setError("");
-
+  
         const res = await fetch(`/api/makerspaces/by-slug/${slug}`, {
           credentials: "include",
         });
-
-        if (!res.ok) {
-          throw new Error("Failed to load makerspace");
-        }
-
+  
         const json = await res.json();
+  
+        if (!res.ok) {
+          throw new Error(json.message || "Failed to load makerspace");
+        }
+  
         setMakerspace(json.makerspace);
       } catch (error) {
         console.error("Failed to load makerspace:", error);
         setError("Could not find this makerspace.");
+        setMakerspace(null);
       } finally {
         setIsLoading(false);
       }
     }
-
-    if (slug) {
-      loadMakerspace();
-    }
+  
+    loadMakerspace();
   }, [slug]);
 
   async function handleJoin() {
@@ -193,13 +200,12 @@ export default function JoinMakerspacePage() {
                     </div>
                   )}
 
-                  <Button
-                    onClick={handleJoin}
-                    disabled={isJoining}
-                    className="w-full rounded-xl"
-                  >
-                    {isJoining ? "Joining..." : `Join ${makerspace.name}`}
-                  </Button>
+<Button
+  onClick={() => setLocation(`/join/${makerspace.slug}/signup`)}
+  className="w-full rounded-xl"
+>
+  Join {makerspace.name}
+</Button>
                 </>
               )}
             </CardContent>

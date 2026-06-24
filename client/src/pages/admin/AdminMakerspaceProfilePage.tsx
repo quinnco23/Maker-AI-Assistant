@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link, useLocation } from "wouter";
+import { useEffect, useState } from "react";
 import {
   Building2,
   MapPin,
@@ -115,11 +116,35 @@ function getStatusBadgeClass(status: MachineRecord["status"] | MakerspaceMember[
   }
 }
 
+
+
 export default function AdminMakerspaceProfilePage() {
   const [data, setData] = React.useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
   const [location] = useLocation();
+
+  const [me, setMe] = useState<any>(null);
+
+
+useEffect(() => {
+  async function loadMe() {
+    try {
+      const res = await fetch("/api/auth/me", {
+        credentials: "include",
+      });
+
+      const json = await res.json();
+
+      setMe(json);
+    } catch (error) {
+      console.error("Failed to load user:", error);
+    }
+  }
+
+  loadMe();
+}, []);
+  
 
 React.useEffect(() => {
   async function loadData() {
@@ -168,15 +193,23 @@ React.useEffect(() => {
   const { makerspace, machines, members } = data;
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 p-6">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div className="flex items-start gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
-            <Building2 className="h-8 w-8 text-slate-500" />
-          </div>
+    <div className="  min-h-screen overflow-x-hidden">
+       <div className="flex flex-col gap-4 rounded-2xl bg-white p-4 shadow-sm sm:p-6 lg:flex-row lg:items-start lg:justify-between">
+       <div className="flex  items-center gap-4 text-center  flex-col lg:flex-row sm:items-start sm:text-left">
+      {me?.adminMakerspace?.logoUrl ? (
+        <img
+          src={me.adminMakerspace.logoUrl}
+          alt={me.adminMakerspace.name ?? "Makerspace logo"}
+          className="size-32 shrink-0 rounded-xl object-cover "
+        />
+      ) : (
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground sm:h-14 sm:w-14">
+          M
+        </div>
+      )}
 
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          <div className="min-w-0">
+            <h1 className="truncate text-xl font-bold tracking-tight sm:text-2xl">
               {makerspace.name}
             </h1>
 
@@ -297,10 +330,10 @@ React.useEffect(() => {
                     </div>
 
                     <div className="flex gap-2">
-  <Button asChild variant="outline" size="sm" className="rounded-xl">
-    <Link href={`/app/admin/machines/${machine.id}`}>Edit</Link>
+  <Button asChild variant="outline" size="sm" className="rounded-xl " > 
+    <Link className="bg-white p-2 rounded-xl text-black border-2 border-black" href={`/app/admin/machines/${machine.id}`}>Edit</Link>
   </Button>
-  <Link  href={`/app/admin/machines/${machine.id}/certification`}>
+  <Link className="bg-primary p-2 rounded-xl text-white "  href={`/app/admin/machines/${machine.id}/certification`}>
   Manage Certification
 </Link>
 </div>

@@ -1,10 +1,97 @@
-// server/db/schema.ts
-
 export type UserRole = "owner" | "admin" | "instructor" | "member";
 export type MembershipStatus = "active" | "pending" | "invited" | "suspended";
 export type MachineStatus = "active" | "inactive" | "maintenance";
 export type CertificationMode = "template" | "duplicate" | "custom" | "none";
-export type UserCertificationStatus = "active" | "expired" | "revoked";
+export type UserCertificationStatus = " pending _review| active" | "expired" | "revoked";
+
+export type CertificationContent = {
+  id: string;
+  title: string;
+  subtitle?: string;
+  machineType?: string;
+  version: string;
+  passingScore: number;
+  estimatedMinutes: number;
+  levels: CertificationLevel[];
+};
+
+export type CertificationLevel =
+  | LessonLevel
+  | ScenarioLevel
+  | HotspotLevel
+  | QuickCheckLevel;
+
+export type LessonLevel = {
+  id: string;
+  type: "lesson";
+  title: string;
+  shortTitle: string;
+  xp: number;
+  narrative: string[];
+  media?: {
+    kind: "image";
+    url: string;
+    alt: string;
+  };
+  keyTakeaways?: string[];
+  callouts?: string[];
+  ctaLabel?: string;
+};
+
+export type ScenarioLevel = {
+  id: string;
+  type: "scenario";
+  title: string;
+  shortTitle: string;
+  xp: number;
+  prompt: string;
+  situation?: string;
+  choices: Array<{
+    id: string;
+    label: string;
+    isCorrect: boolean;
+    feedback: string;
+  }>;
+};
+
+export type HotspotLevel = {
+  id: string;
+  type: "hotspot";
+  title: string;
+  shortTitle: string;
+  xp: number;
+  prompt: string;
+  imageUrl: string;
+  imageAlt: string;
+  hotspots: Array<{
+    id: string;
+    x: number;
+    y: number;
+    radius?: number;
+    label: string;
+    isCorrect: boolean;
+    feedback?: string;
+  }>;
+  minCorrect?: number;
+};
+
+export type QuickCheckLevel = {
+  id: string;
+  type: "quick_check";
+  title: string;
+  shortTitle: string;
+  xp: number;
+  questions: Array<{
+    id: string;
+    prompt: string;
+    choices: Array<{
+      id: string;
+      label: string;
+      isCorrect: boolean;
+    }>;
+    explanation?: string;
+  }>;
+};
 
 export type UserRecord = {
   id: string;
@@ -13,6 +100,8 @@ export type UserRecord = {
   avatarUrl?: string;
   createdAt: string;
   updatedAt: string;
+  bio?: string | null;
+  phone?: string | null;
 };
 
 export type MakerspaceRecord = {
@@ -26,6 +115,8 @@ export type MakerspaceRecord = {
   createdByUserId: string;
   createdAt: string;
   updatedAt: string;
+  onboardingCompleted?: boolean;
+onboardingCompletedAt?: string | null;
 };
 
 export type MakerspaceMembershipRecord = {
@@ -68,19 +159,26 @@ export type MachineRecord = {
   updatedAt: string;
 };
 
+
 export type CertificationModuleRecord = {
   id: string;
   makerspaceId: string;
   machineId?: string | null;
   title: string;
-  mode: CertificationMode;
-  templateId?: string | null;
-  contentJson?: unknown;
+  description?: string;
+  version?: string;
+  sourceType?: "template" | "custom";
+  sourceTemplateId?: string | null;
+  status?: "draft" | "published" | "archived";
+  contentJson?: CertificationContent;
   estimatedMinutes?: number | null;
   passingScore?: number | null;
+  expiresInDays?: number | null;
+  isRequired?: boolean;
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
+  
 };
 
 export type MachineCertificationRecord = {
@@ -94,21 +192,13 @@ export type MachineCertificationRecord = {
 export type CertificationAttemptRecord = {
   id: string;
   makerspaceId: string;
-  machineId?: string | null;
-  title: string;
-  description?: string;
-  version?: string;
-  sourceType?: "template" | "duplicate" | "custom";
-  sourceTemplateId?: string | null;
-  status?: "draft" | "published" | "archived";
-  contentJson?: unknown;
-  estimatedMinutes?: number | null;
-  passingScore?: number | null;
-  expiresInDays?: number | null;
-  isRequired?: boolean;
-  isPublished: boolean;
+  userId: string;
+  certificationModuleId: string;
+  score: number;
+  passed: boolean;
+  attemptNumber: number;
+  answersJson?: unknown;
   createdAt: string;
-  updatedAt: string;
 };
 
 export type UserCertificationRecord = {
@@ -137,6 +227,18 @@ export type AdminMakerspaceView = {
   }>;
 };
 
+export type KnowledgeArticleRecord = {
+  id: string;
+  makerspaceId: string;
+  title: string;
+  content: string;
+  machineId?: string | null;
+  tags: string[];
+  difficulty: "beginner" | "intermediate" | "advanced";
+  createdAt: string;
+  updatedAt: string;
+};
+
 export function nowIso(): string {
   return new Date().toISOString();
 }
@@ -155,15 +257,3 @@ export function slugify(value: string): string {
     .replace(/^-+|-+$/g, "")
     .replace(/-{2,}/g, "-");
 }
-
-export type KnowledgeArticleRecord = {
-  id: string;
-  makerspaceId: string;
-  title: string;
-  content: string;
-  machineId?: string | null;
-  tags: string[];
-  difficulty: "beginner" | "intermediate" | "advanced";
-  createdAt: string;
-  updatedAt: string;
-};

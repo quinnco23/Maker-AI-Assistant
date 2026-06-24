@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect,  } from "react";
+import { Label } from "@/components/ui/label";
 import {
   Search,
   Filter,
@@ -10,13 +11,14 @@ import {
   Monitor,
   Factory,
   
+  
 } from "lucide-react";
 
 import { Link } from "wouter";
 import rawMachines from "@/data/makerspace_equipment_database.json";
 
 import { Card, CardContent, CardHeader, CardTitle,  } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Input, } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button,  } from "@/components/ui/button";
 import {
@@ -25,6 +27,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  
   
 
 } from "@/components/ui/select";
@@ -107,14 +110,16 @@ function MachineCard({
   isSaving,
 }: {
   machine: Machine;
-  onAddToMakerspace: (machine: Machine) => void;
+  onAddToMakerspace: (machine: Machine,  quantity: number,) => void;
   isAdded?: boolean;
   isSaving?: boolean;
 }) {
   const Icon = categoryIcons[machine.shopCategory] || Wrench;
+  const [quantity, setQuantity] = useState(1);
 
   return (
-    <Card className="h-full rounded-2xl border-slate-200 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+    
+    <Card className="h-full  rounded-2xl border-slate-200 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-2">
@@ -163,33 +168,46 @@ function MachineCard({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 pt-2">
-          <Button asChild size="sm" className="rounded-xl">
-            <a href={machine.manualUrl} target="_blank" rel="noreferrer">
-              Manual
-            </a>
-          </Button>
+        <div className="flex flex-wrap items-center gap-2 pt-2">
+  <Button asChild size="sm" className="rounded-xl">
+    <a href={machine.manualUrl} target="_blank" rel="noreferrer">
+      Manual
+    </a>
+  </Button>
 
-          <Button asChild size="sm" variant="outline" className="rounded-xl">
-            <a href={machine.manufacturerUrl} target="_blank" rel="noreferrer">
-              Maker Site
-            </a>
-          </Button>
+  <Button asChild size="sm" variant="outline" className="rounded-xl">
+    <a href={machine.manufacturerUrl} target="_blank" rel="noreferrer">
+      Maker Site
+    </a>
+  </Button>
 
-          <Button
-  size="sm"
-  variant={isAdded ? "secondary" : "default"}
-  className="rounded-xl"
-  onClick={() => onAddToMakerspace(machine)}
-  disabled={isAdded || isSaving}
->
-  {isAdded ? "Added" : isSaving ? "Adding..." : "Add to Makerspace"}
-</Button>
-<Link  href={`/app/admin/machines/${machine.id}/certification`}>
-  Manage Certification
-</Link>
+  <div className="flex items-center gap-1 rounded-xl border bg-white px-2 py-1">
+    <Label htmlFor={`quantity-${machine.id}`} className="text-xs text-slate-500">
+      Qty
+    </Label>
 
-        </div>
+    <Input
+    
+      id={`quantity-${machine.id}`}
+      type="number"
+      min={1}
+      max={50}
+      value={quantity}
+      onChange={(e) => setQuantity(Number(e.target.value))}
+      className="h-7 w-14 border-0 px-1 text-center text-sm shadow-none focus-visible:ring-0"
+    />
+  </div>
+
+  <Button
+    size="sm"
+    variant={isAdded ? "secondary" : "default"}
+    className="rounded-xl"
+    onClick={() => onAddToMakerspace(machine, quantity)}
+    disabled={isAdded || isSaving}
+  >
+    {isAdded ? "Added" : isSaving ? "Adding..." : "Add"}
+  </Button>
+</div>
       </CardContent>
     </Card>
   );
@@ -198,7 +216,7 @@ function MachineCard({
 export default function MakerspaceMachineCatalogue() {
 
 
-  const [search, setSearch] = useState("");
+const [search, setSearch] = useState("");
 const [category, setCategory] = useState("all");
 const [powerFilter, setPowerFilter] = useState("all");
 const [addedMachineIds, setAddedMachineIds] = useState<number[]>([]);
@@ -230,7 +248,7 @@ useEffect(() => {
   loadAdminMachines();
 }, []);
 
-async function handleAddToMakerspace(machine: Machine) {
+async function handleAddToMakerspace(machine: Machine,  quantity: number,) {
   if (addedMachineIds.includes(machine.id)) return;
 
   try {
@@ -246,7 +264,11 @@ async function handleAddToMakerspace(machine: Machine) {
       requiresCertification: true,
       imageUrl: "",
       catalogSourceId: machine.id,
+      quantity,
+    
     };
+
+    console.log("machine payload", payload);
 
     const res = await fetch("/api/admin/machines", {
       method: "POST",
@@ -311,7 +333,7 @@ async function handleAddToMakerspace(machine: Machine) {
   const softwareCount = new Set((machineData as Machine[]).map((m) => m.software)).size;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white p-6 md:p-10">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white w-xl md:p-10">
       <div className="mx-auto max-w-7xl space-y-8">
         <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
           <div className="space-y-4">
