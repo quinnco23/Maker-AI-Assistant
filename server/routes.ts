@@ -2,15 +2,15 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 
-import { registerAdminOnboardingRoutes } from "./routes/admin-onboarding";
-import { registerAdminMakerspaceRoutes } from "./routes/admin-makerspace";
-import { registerMachineRoutes } from "./routes/machines";
-import { registerMachineCertificationRoutes } from "./routes/machine-certifications";
-import { registerJoinRoutes } from "./routes/join";
-import { registerMemberRoutes } from "./routes/member";
-import { registerKnowledgeRoutes } from "./routes/knowledge";
-import { registerAuthRoutes } from "./routes/auth.routes";
-import { registerScheduleCertificationRoutes } from "./routes/cert-scheduel";
+import { registerAdminOnboardingRoutes } from "./routes/admin-onboarding.ts";
+import { registerAdminMakerspaceRoutes } from "./routes/admin-makerspace.ts";
+import { registerMachineRoutes } from "./routes/machines.ts";
+import { registerMachineCertificationRoutes } from "./routes/machine-certifications.ts";
+import { registerJoinRoutes } from "./routes/join.ts";
+import { registerMemberRoutes } from "./routes/member.ts";
+import { registerKnowledgeRoutes } from "./routes/knowledge.ts";
+import { registerAuthRoutes } from "./routes/auth.routes.ts";
+import { registerScheduleCertificationRoutes } from "./routes/cert-scheduel.ts";
 
 
 export async function registerRoutes(
