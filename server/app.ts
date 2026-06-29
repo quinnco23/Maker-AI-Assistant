@@ -2,8 +2,8 @@ import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
 
-import { setupAuth } from "./auth";
-import { registerRoutes } from "./routes";
+import { setupAuth } from "./auth.ts";
+import { registerRoutes } from "./routes.ts";
 
 export async function createApp() {
   const app = express();
