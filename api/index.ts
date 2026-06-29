@@ -1,30 +1,14 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import express from "express";
-import session from "express-session";
-import { registerRoutes } from "../server/routes";
+import { createApp } from "../server/app";
 
+let appPromise: ReturnType<typeof createApp> | null = null;
 
-const app = express();
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (!appPromise) {
+    appPromise = createApp();
+  }
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+  const { app } = await appPromise;
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "dev-secret-change-me",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    },
-  }),
-);
-
-registerRoutes(app);
-
-export default function handler(req: VercelRequest, res: VercelResponse) {
-  return app(req, res);
+  return app(req as any, res as any);
 }
