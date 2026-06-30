@@ -1,4 +1,4 @@
-import { createApp } from "./app.ts";
+ import { createApp } from "./app.ts";
 import { serveStatic } from "./static.ts";
 
 export function log(message: string, source = "express") {
