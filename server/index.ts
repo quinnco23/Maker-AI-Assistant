@@ -1,5 +1,5 @@
-import { createApp } from "./app";
-import { serveStatic } from "./static";
+import { createApp } from "./app.ts";
+import { serveStatic } from "./static.ts";
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
