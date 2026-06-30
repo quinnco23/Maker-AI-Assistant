@@ -1,31 +1,48 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { createApp } from "../server/app.ts";
+import express from "express";
+import { createServer } from "http";
 
-let appPromise: ReturnType<typeof createApp> | null = null;
+import { setupAuth } from "../server/auth";
+import { registerRoutes } from "../server/routes";
+
+let appPromise: Promise<express.Express> | null = null;
+
+async function createVercelApp() {
+  const app = express();
+  const httpServer = createServer(app);
+
+  app.use(
+    express.json({
+      verify: (req: any, _res, buf) => {
+        req.rawBody = buf;
+      },
+    }),
+  );
+
+  app.use(express.urlencoded({ extended: false }));
+
+  setupAuth(app);
+
+  await registerRoutes(httpServer, app);
+
+  return app;
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
-    console.log("API request:", req.method, req.url);
-
-    
-
     if (!appPromise) {
-      console.log("Creating Express app...");
-      appPromise = createApp();
+      appPromise = createVercelApp();
     }
 
-    const { app } = await appPromise;
+    const app = await appPromise;
 
     return app(req as any, res as any);
   } catch (error) {
     console.error("Vercel API crashed:", error);
-  
+
     return res.status(500).json({
       message: "API crashed",
       error: error instanceof Error ? error.message : String(error),
     });
   }
 }
-
-
-
