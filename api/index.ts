@@ -2,8 +2,8 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import express from "express";
 import { createServer } from "http";
 
-import { setupAuth } from "../server/auth.js";
-import { registerRoutes } from "../server/routes.js";
+import { setupAuth } from "../server/auth";
+import { registerRoutes } from "../server/routes";
 
 let appPromise: Promise<express.Express> | null = null;
 
