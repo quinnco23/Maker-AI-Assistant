@@ -167,7 +167,7 @@ export type CertificationModuleRecord = {
   title: string;
   description?: string;
   version?: string;
-  sourceType?: "template" | "custom";
+  sourceType?: "template" | "duplicate" | "custom";
   sourceTemplateId?: string | null;
   status?: "draft" | "published" | "archived";
   contentJson?: CertificationContent;

@@ -290,7 +290,7 @@ export default function AdminLayout({
       <div className="flex min-w-0 flex-1 flex-col">
   <TopBar />
 
-  <main className="flex-1 overflow-auto p-5 md:p-0">
+  <main className="flex-1 overflow-auto px-3 pb-3 md:px-0 md:pb-0">
     {children}
   </main>
 </div>

@@ -9,8 +9,11 @@ export function registerMachineCertificationRoutes(app: any) {
       
           const machine = await storage.getMachineById(machineId);
           console.log("GET cert route machine:", machine);
+          
       
           if (!machine) {
+            
+            
             return res.status(404).json({ message: "Machine not found" });
           }
       
@@ -26,6 +29,7 @@ export function registerMachineCertificationRoutes(app: any) {
           }
       
           console.log("GET cert route activeProgram:", activeProgram);
+          
       
           const templates = [
             {
@@ -88,33 +92,52 @@ export function registerMachineCertificationRoutes(app: any) {
               levelsCount: 4,
               tags: ["Vinyl", "Beginner"],
             },
-            {
-              id: "sewing-machine-basic-operator",
-              title: "Sewing Machine Basic Operator",
-              description: "Basic sewing machine certification for threading, needle safety, fabric handling, and cleanup.",
-              machineTypes: ["sewing_machine", "Textiles"],
-              estimatedMinutes: 10,
-              passingScore: 80,
-              levelsCount: 5,
-              tags: ["Textiles", "Beginner"],
-            },
-            {
-              id: "woodshop-tool-safety-core",
-              title: "Woodshop Tool Safety Core",
-              description: "General certification for woodshop PPE, dust collection, safe cuts, and tool readiness.",
-              machineTypes: ["woodshop", "Table Saw", "Bandsaw", "Miter Saw"],
-              estimatedMinutes: 15,
-              passingScore: 85,
-              levelsCount: 6,
-              tags: ["Woodshop", "Safety"],
-            },
+            // {
+            //   id: "sewing-machine-basic-operator",
+            //   title: "Sewing Machine Basic Operator",
+            //   description: "Basic sewing machine certification for threading, needle safety, fabric handling, and cleanup.",
+            //   machineTypes: ["sewing_machine", "Textiles"],
+            //   estimatedMinutes: 10,
+            //   passingScore: 80,
+            //   levelsCount: 5,
+            //   tags: ["Textiles", "Beginner"],
+            // },
+            // {
+            //   id: "woodshop-tool-safety-core",
+            //   title: "Woodshop Tool Safety Core",
+            //   description: "General certification for woodshop PPE, dust collection, safe cuts, and tool readiness.",
+            //   machineTypes: ["woodshop", "Table Saw", "Bandsaw", "Miter Saw"],
+            //   estimatedMinutes: 15,
+            //   passingScore: 85,
+            //   levelsCount: 6,
+            //   tags: ["Woodshop", "Safety"],
+            // },
           ];
-      
-          return res.status(200).json({
-            machine,
-            activeProgram,
-            templates,
-          });
+          console.log(
+            "CERT TEMPLATE IDS:",
+            templates.map((t: any) => `${t.id} - ${t.title}`)
+          );
+          const requiresCertification =
+  machineCertification?.required ??
+  activeProgram?.isRequired ??
+  machine.requiresCertification ??
+  false;
+
+return res.status(200).json({
+  machine: {
+    ...machine,
+    requiresCertification,
+  },
+  activeProgram: activeProgram
+    ? {
+        ...activeProgram,
+        isRequired: requiresCertification,
+      }
+    : null,
+  requiresCertification,
+  templates,
+});
+          
         } catch (error) {
           console.error("Failed to load machine certification page:", error);
           return res.status(500).json({
@@ -167,6 +190,14 @@ if (existing) {
               await storage.updateMachineCertification(machineCertification.id, {
                 required: !!body.isRequired,
               });
+
+              
+
+              await storage.updateMachine(machineId, {
+                requiresCertification: !!body.isRequired,
+                updatedAt: now,
+              });
+
             }
       
             return res.status(200).json({ program: updated });
@@ -202,6 +233,11 @@ if (existing) {
             createdAt: now,
 
             
+          });
+
+          await storage.updateMachine(machineId, {
+            requiresCertification: !!body.isRequired,
+            updatedAt: now,
           });
 
           

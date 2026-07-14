@@ -27,6 +27,17 @@ export function useCertificationEngine(
   module: CertificationModule,
   options?: Options,
 ): CertificationEngine {
+  if (!module) {
+    throw new Error("useCertificationEngine received no certification module.");
+  }
+  
+  if (!Array.isArray(module.levels)) {
+    console.error("Invalid certification module:", module);
+  
+    throw new Error(
+      `Certification module "${module.id ?? "unknown"}" does not contain a levels array.`,
+    );
+  }
   const storageKey =
     options?.storageKey ?? `certification_progress:${module.machineId}:${module.id}`;
 

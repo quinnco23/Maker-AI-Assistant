@@ -60,7 +60,7 @@ const slug = params?.slug;
   return (
     <div className="min-h-screen bg-background text-foreground">
       <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-3 flex-wrap">
+        <div className="mx-auto flex max-w-6xl items-center justify-center md:justify-between gap-4 px-6 py-3 flex-wrap">
 
           <Link href="/" data-testid="link-home">
 
@@ -95,10 +95,10 @@ const slug = params?.slug;
             Built by Makers, for Makers.
           </Badge>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl ">
-            AI Driven Makerspace ToolS and Community
+            AI Driven Makerspace Tools and Community
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            MakerMatic gives you and your members the tools to create a Makerspace of excellence.Let MakerMatic do the hard work so your Space can focus on making cool stuff!
+            MakerMatic gives you and your members the tools to create a Makerspace of excellence. Let MakerMatic do the hard work so your Space can focus on making cool stuff!
           </p>
           <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
             <Link href="/signup">
@@ -122,7 +122,7 @@ const slug = params?.slug;
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight">How It Works</h2>
           <p className="mt-2 text-muted-foreground">
-            Three steps to better, safer and efficiant Makers experiance. 
+            Three steps to better, safer and more efficiant Makers experiance. 
           </p>
         </div>
         <div className="mt-12 grid gap-8 sm:grid-cols-3">

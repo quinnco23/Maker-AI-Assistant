@@ -60,7 +60,11 @@ export default function DiscoverMakerspacesPage() {
   return (
     <div className="min-h-screen bg-slate-50 px-6 py-10">
       <div className="mx-auto max-w-6xl space-y-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between items-center">
+        <Link href="/" data-testid="link-home">
+
+<img src="Logo330.png" className="h-20" />
+</Link>
           <div>
             <p className="text-sm font-medium text-slate-500">
               Makerspace Directory

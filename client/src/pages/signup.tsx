@@ -66,6 +66,10 @@ if (!res.ok) {
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12">
       <div className="mb-6">
         <Link href="/" data-testid="link-back-home">
+        <Link href="/" data-testid="link-home">
+
+<img src="Logo330.png" className="h-20" />
+</Link>
           <Button variant="ghost" size="sm">
             <ArrowLeft />
             Back to home

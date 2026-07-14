@@ -118,7 +118,7 @@ export default function CertificationReviewsPage() {
 
         <h1 className="mt-2 text-3xl font-bold text-slate-950">
           Review Schedule
-        </h1>ual
+        </h1>
 
         <p className="mt-2 text-slate-600">
           Manage hands-on machine checkoffs after members pass online

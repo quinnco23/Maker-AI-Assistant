@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useLocation, useRoute } from "wouter";
 import { Button } from "@/components/ui/button";
 import { CertificationShell } from "@/features/certifications/data/components/CertificationShell";
 import { useCertificationEngine } from "@/features/hooks/useCertificationEngine";
+
 
 export default function AdminCertificationPreviewPage() {
   const [, params] = useRoute(
@@ -14,6 +15,21 @@ export default function AdminCertificationPreviewPage() {
 
   const [moduleContent, setModuleContent] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  
+  const parsedModuleContent = useMemo(() => {
+    if (!moduleContent) return null;
+  
+    if (typeof moduleContent === "string") {
+      try {
+        return JSON.parse(moduleContent);
+      } catch (error) {
+        console.error("Failed to parse certification content:", error);
+        return null;
+      }
+    }
+  
+    return moduleContent;
+  }, [moduleContent]);
 
   useEffect(() => {
     async function loadCertification() {
@@ -54,7 +70,7 @@ export default function AdminCertificationPreviewPage() {
   }, [machineId]);
 
   const engine = useCertificationEngine(
-    moduleContent ?? {
+    parsedModuleContent ?? {
       id: "preview-loading",
       title: "Loading Preview...",
       version: "1.0.0",
@@ -71,17 +87,22 @@ export default function AdminCertificationPreviewPage() {
     return <div className="p-6 text-sm text-slate-500">Loading preview...</div>;
   }
 
-  if (!moduleContent) {
+  if (
+    !parsedModuleContent ||
+    !Array.isArray(parsedModuleContent.levels)
+  ) {
     return (
       <div className="space-y-4 p-6">
         <p className="text-sm text-slate-500">
-          No certification content found for this machine.
+          Certification content is missing or invalid.
         </p>
-
+  
         <Button
           variant="outline"
           onClick={() =>
-            setLocation(`/app/admin/machines/${machineId}/certification`)
+            setLocation(
+              `/app/admin/machines/${machineId}/certification`,
+            )
           }
         >
           Back to Builder

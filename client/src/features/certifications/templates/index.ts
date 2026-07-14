@@ -13,9 +13,7 @@ export const certificationTemplates: Record<string, any> = {
    "cnc-router-safety-core": cncRouterCertificationModule,
    //"cnc-mill-basic-operator": cncMillCertificationModule,
    "waterjet-cutter-safety-core": waterjetCertificationModule,
-   "vinyl-cutter-basic-operator": vinylCutterCertificationModule,
-  // "sewing-machine-basic-operator": sewingMachineCertificationModule,
-  // "woodshop-tool-safety-core": woodshopSafetyCertificationModule,
+  
 };
 
 export function getTemplate(templateId: string) {
