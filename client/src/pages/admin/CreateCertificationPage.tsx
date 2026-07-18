@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, useLocation } from "wouter";
+import { Link, useLocation, } from "wouter";
 import {
   ArrowLeft,
   ShieldCheck,
@@ -15,6 +15,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -23,6 +24,13 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type MachineType =
   | "3d_printer"
@@ -72,88 +80,7 @@ type CertificationTemplate = {
   tags: string[];
 };
 
-const certificationTemplates: CertificationTemplate[] = [
-  {
-    id: "prusa-mk4s-operator-badge",
-    title: "Prusa MK4S Operator Badge",
-    description: "Beginner certification for safe Prusa MK4S operation.",
-    machineTypes: ["3d_printer", "3D Printing"],
-    estimatedMinutes: 8,
-    passingScore: 80,
-    levelsCount: 5,
-    tags: ["3D Printing", "Beginner"],
-  },
-  {
-    id: "laser-cutter-safety-core",
-    title: "Laser Cutter Safety Core",
-    description: "Safety-first laser cutter certification.",
-    machineTypes: ["laser_cutter", "Laser"],
-    estimatedMinutes: 12,
-    passingScore: 85,
-    levelsCount: 6,
-    tags: ["Laser", "Safety"],
-  },
-  {
-    id: "cnc-router-safety-core",
-    title: "CNC Router Safety Core",
-    description: "Intro certification for CNC router safety, setup, hold-downs, and emergency stop.",
-    machineTypes: ["cnc_router", "CNC Router", "CNC"],
-    estimatedMinutes: 15,
-    passingScore: 85,
-    levelsCount: 7,
-    tags: ["CNC", "Router", "Safety"],
-  },
-  {
-    id: "cnc-mill-basic-operator",
-    title: "CNC Mill Basic Operator",
-    description: "Beginner certification for CNC mill setup, workholding, tool awareness, and safe operation.",
-    machineTypes: ["cnc_mill", "CNC Mill", "CNC"],
-    estimatedMinutes: 18,
-    passingScore: 85,
-    levelsCount: 7,
-    tags: ["CNC", "Mill", "Operator"],
-  },
-  {
-    id: "waterjet-cutter-safety-core",
-    title: "Waterjet Cutter Safety Core",
-    description: "Safety certification for waterjet setup, material handling, piercing, and shutdown.",
-    machineTypes: ["waterjet", "Waterjet Cutter"],
-    estimatedMinutes: 15,
-    passingScore: 85,
-    levelsCount: 6,
-    tags: ["Waterjet", "Safety"],
-  },
-  {
-    id: "vinyl-cutter-basic-operator",
-    title: "Vinyl Cutter Basic Operator",
-    description: "Beginner certification for vinyl cutter setup, blade depth, material loading, and weeding.",
-    machineTypes: ["vinyl_cutter", "Vinyl Cutter"],
-    estimatedMinutes: 8,
-    passingScore: 80,
-    levelsCount: 4,
-    tags: ["Vinyl", "Beginner"],
-  },
-  // {
-  //   id: "sewing-machine-basic-operator",
-  //   title: "Sewing Machine Basic Operator",
-  //   description: "Basic sewing machine certification for threading, needle safety, fabric handling, and cleanup.",
-  //   machineTypes: ["sewing_machine", "Textiles"],
-  //   estimatedMinutes: 10,
-  //   passingScore: 80,
-  //   levelsCount: 5,
-  //   tags: ["Textiles", "Beginner"],
-  // },
-  {
-    id: "woodshop-tool-safety-core",
-    title: "Woodshop Tool Safety Core",
-    description: "General certification for woodshop PPE, dust collection, safe cuts, and tool readiness.",
-    machineTypes: ["woodshop", "Table Saw", "Bandsaw", "Miter Saw"],
-    estimatedMinutes: 15,
-    passingScore: 85,
-    levelsCount: 6,
-    tags: ["Woodshop", "Safety"],
-  },
-];
+
 
 
 
@@ -204,19 +131,84 @@ function getMachineIcon(type?: MachineType) {
 export default function CreateCertificationPage() {
   const [, setLocation] = useLocation();
 
-  const [onboarding, setOnboarding] = React.useState<OnboardingState | null>(null);
-  const [mode, setMode] = React.useState<CertificationMode>("template");
-  const [selectedTemplateId, setSelectedTemplateId] = React.useState<string>("");
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [templates, setTemplates] =
+    React.useState<CertificationTemplate[]>([]);
+
+  const [onboarding, setOnboarding] =
+    React.useState<OnboardingState | null>(null);
+
+  const [mode, setMode] =
+    React.useState<CertificationMode>("template");
+
+  const [selectedTemplateId, setSelectedTemplateId] =
+    React.useState<string>("");
+
+  const [isSubmitting, setIsSubmitting] =
+    React.useState(false);
+
+  React.useEffect(() => {
+    async function loadTemplates() {
+      try {
+        const res = await fetch(
+          "/api/admin/onboarding/certification-templates",
+          {
+            credentials: "include",
+          },
+        );
+
+        const json = await res.json();
+
+        if (!res.ok) {
+          throw new Error(
+            json.message ||
+              "Failed to load certification templates",
+          );
+        }
+
+        setTemplates(
+          (json.templates ?? []).map((template: any) => ({
+            ...template,
+            machineTypes: Array.isArray(template.machineTypes)
+              ? template.machineTypes
+              : [],
+            tags: Array.isArray(template.tags)
+              ? template.tags
+              : [],
+            levelsCount:
+              template.levelsCount ??
+              template.levels ??
+              0,
+          })),
+        );
+      } catch (error) {
+        console.error(
+          "Failed to load certification templates:",
+          error,
+        );
+
+        setTemplates([]);
+      }
+    }
+
+    loadTemplates();
+  }, []);
 
   React.useEffect(() => {
     try {
-      const raw = localStorage.getItem("makerspace_onboarding");
-      const parsed: OnboardingState | null = raw ? JSON.parse(raw) : null;
+      const raw = localStorage.getItem(
+        "makerspace_onboarding",
+      );
+
+      const parsed: OnboardingState | null = raw
+        ? JSON.parse(raw)
+        : null;
+
       setOnboarding(parsed);
 
       if (!parsed?.makerspace) {
-        setLocation("/app/admin/onboarding/makerspace");
+        setLocation(
+          "/app/admin/onboarding/makerspace",
+        );
         return;
       }
 
@@ -225,7 +217,9 @@ export default function CreateCertificationPage() {
         return;
       }
 
-      if (parsed.machine.requiresCertification === false) {
+      if (
+        parsed.machine.requiresCertification === false
+      ) {
         localStorage.setItem(
           "makerspace_onboarding",
           JSON.stringify({
@@ -236,31 +230,58 @@ export default function CreateCertificationPage() {
             },
           }),
         );
+
         setLocation("/app/admin/onboarding/review");
-        return;
-      }
-
-      const recommended = certificationTemplates.find((template) =>
-        template.machineTypes.includes(parsed.machine!.type),
-      );
-
-      if (recommended) {
-        setSelectedTemplateId(recommended.id);
       }
     } catch (error) {
       console.error(error);
-      setLocation("/app/admin/onboarding/makerspace");
+
+      setLocation(
+        "/app/admin/onboarding/makerspace",
+      );
     }
   }, [setLocation]);
+
+  React.useEffect(() => {
+    if (
+      !onboarding?.machine?.type ||
+      templates.length === 0
+    ) {
+      return;
+    }
+
+    const recommended = templates.find((template) =>
+      template.machineTypes.includes(
+        onboarding.machine!.type,
+      ),
+    );
+
+    if (recommended && !selectedTemplateId) {
+      setSelectedTemplateId(recommended.id);
+    }
+  }, [
+    onboarding?.machine?.type,
+    templates,
+    selectedTemplateId,
+  ]);
+
+  React.useEffect(() => {
+    console.log("TEMPLATES FROM API:", templates);
+  }, [templates]);
 
   const machine = onboarding?.machine;
 
   const filteredTemplates = React.useMemo(() => {
-    if (!machine?.type) return certificationTemplates;
-    return certificationTemplates.filter((template) =>
-      template.machineTypes.includes(machine.type),
-    );
-  }, [machine?.type]);
+    if (!machine?.type) return templates;
+  
+    return templates.filter((template) => {
+      const machineTypes = Array.isArray(template.machineTypes)
+        ? template.machineTypes
+        : [];
+  
+      return machineTypes.includes(machine.type);
+    });
+  }, [machine?.type, templates]);
 
   const selectedTemplate =
     filteredTemplates.find((template) => template.id === selectedTemplateId) ?? null;
@@ -446,7 +467,25 @@ export default function CreateCertificationPage() {
               {mode === "template" && (
                 <div className="space-y-3">
                   <p className="text-sm font-medium text-slate-700">Recommended templates</p>
+                  <Select
+  value={selectedTemplateId}
+  onValueChange={setSelectedTemplateId}
+>
+  <SelectTrigger className="w-full rounded-xl bg-white">
+    <SelectValue placeholder="Choose a certification template" />
+  </SelectTrigger>
 
+  <SelectContent>
+    {filteredTemplates.map((template) => (
+      <SelectItem
+        key={template.id}
+        value={template.id}
+      >
+        {template.title}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
                   {filteredTemplates.length === 0 ? (
                     <div className="rounded-2xl border border-dashed bg-slate-50 p-5 text-sm text-slate-600">
                       No machine-specific templates found yet. You can still start from scratch.

@@ -1,6 +1,10 @@
 import { publishAdminOnboarding } from "server/services/admin-onboarding.service";
 import { storage } from "server/storage";
 
+import { certificationTemplates } from "server/certifications/templates";
+
+
+
 export function registerAdminOnboardingRoutes(app: any) {
   app.post("/api/admin/onboarding/publish", async (req: any, res: any) => {
     try {
@@ -30,4 +34,13 @@ export function registerAdminOnboardingRoutes(app: any) {
       });
     }
   });
+
+  app.get(
+    "/api/admin/onboarding/certification-templates",
+    async (_req, res) => {
+      return res.status(200).json({
+        templates: certificationTemplates,
+      });
+    },
+  );
 }

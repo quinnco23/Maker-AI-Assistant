@@ -119,7 +119,38 @@ export async function publishAdminOnboarding({
 
   const now = nowIso();
 
-  const makerspace: MakerspaceRecord = {
+  const existingAdminView =
+  await storage.getAdminMakerspaceByUserId(userId);
+
+let makerspace: MakerspaceRecord;
+
+if (existingAdminView?.makerspace) {
+  const existingMakerspace = existingAdminView.makerspace;
+
+  const updatedMakerspace = await storage.updateMakerspace(
+    existingMakerspace.id,
+    {
+      name: payload.makerspace.name.trim(),
+      slug:
+        payload.makerspace.slug?.trim() ||
+        existingMakerspace.slug ||
+        (await uniqueMakerspaceSlug(payload.makerspace.name)),
+      location: payload.makerspace.location.trim(),
+      description: payload.makerspace.description.trim(),
+      website: payload.makerspace.website?.trim() || undefined,
+      logoUrl: payload.makerspace.logoUrl?.trim() || undefined,
+      onboardingCompleted: true,
+      updatedAt: now,
+    },
+  );
+
+  if (!updatedMakerspace) {
+    throw new Error("Failed to update onboarding makerspace.");
+  }
+
+  makerspace = updatedMakerspace;
+} else {
+  makerspace = {
     id: createId("ms"),
     name: payload.makerspace.name.trim(),
     slug: await uniqueMakerspaceSlug(
@@ -130,6 +161,7 @@ export async function publishAdminOnboarding({
     website: payload.makerspace.website?.trim() || undefined,
     logoUrl: payload.makerspace.logoUrl?.trim() || undefined,
     createdByUserId: userId,
+    onboardingCompleted: true,
     createdAt: now,
     updatedAt: now,
   };
@@ -147,6 +179,7 @@ export async function publishAdminOnboarding({
   };
 
   await storage.createMembership(membership);
+}
 
   const machine: MachineRecord = {
     id: createId("machine"),

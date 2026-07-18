@@ -107,8 +107,51 @@ export default function CreateMakerspacePage() {
   const [errors, setErrors] = React.useState<MakerspaceFormErrors>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [logoPreviewUrl, setLogoPreviewUrl] = React.useState<string>("");
+  
 
   const slugWasEditedRef = React.useRef(false);
+
+  React.useEffect(() => {
+    async function loadDraftMakerspace() {
+      try {
+        const res = await fetch("/api/auth/me", {
+          credentials: "include",
+        });
+  
+        const json = await res.json();
+  
+        if (!res.ok) {
+          throw new Error(json.message || "Failed to load makerspace");
+        }
+  
+        const makerspace = json.adminMakerspace;
+  
+        if (!makerspace) return;
+  
+        setValues((current) => ({
+          ...current,
+          name: current.name || makerspace.name || "",
+          slug: current.slug || makerspace.slug || "",
+          location: current.location || makerspace.location || "",
+          description:
+            current.description || makerspace.description || "",
+          website: current.website || makerspace.website || "",
+        }));
+  
+        if (makerspace.slug) {
+          slugWasEditedRef.current = true;
+        }
+  
+        if (makerspace.logoUrl) {
+          setLogoPreviewUrl(makerspace.logoUrl);
+        }
+      } catch (error) {
+        console.error("Failed to prefill onboarding:", error);
+      }
+    }
+  
+    loadDraftMakerspace();
+  }, []);
 
   React.useEffect(() => {
     return () => {

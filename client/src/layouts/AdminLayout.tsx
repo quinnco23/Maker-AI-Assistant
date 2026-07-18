@@ -79,46 +79,61 @@ export default function AdminLayout({
         const res = await fetch("/api/auth/me", {
           credentials: "include",
         });
-
+  
         const json = await res.json();
+  
+        console.log("ADMIN LAYOUT AUTH CHECK", {
+          location,
+          onboardingCompleted:
+            json.adminMakerspace?.onboardingCompleted,
+          user: json.user,
+          memberships: json.memberships,
+          adminMakerspace: json.adminMakerspace,
+        });
+  
         setMe(json);
-
+  
         if (!json.user) {
           setLocation("/signin");
           return;
         }
-
+  
         const adminMembership = json.memberships?.find((m: any) =>
-          ["owner", "admin", "instructor"].includes(m.role),
+          ["owner", "admin", "instructor"].includes(
+            String(m.role).toLowerCase(),
+          ),
         );
-
+  
         if (!adminMembership) {
           setLocation("/app/member/home");
           return;
         }
-
+  
         const complete =
           json.adminMakerspace?.onboardingCompleted === true;
-
+  
         setOnboardingComplete(complete);
-
-        const isOnboardingPage = location.startsWith("/app/admin/onboarding");
-
-        if (!complete && !isOnboardingPage) {
+  
+        const onOnboardingPage =
+          location.startsWith("/app/admin/onboarding");
+  
+        if (!complete && !onOnboardingPage) {
           setLocation("/app/admin/onboarding");
+          return;
         }
-
-        if (complete && isOnboardingPage) {
-            setLocation("/app/admin/setup");
+  
+        if (complete && onOnboardingPage) {
+          setLocation("/app/admin/setup");
+          return;
         }
       } catch (error) {
-        console.error(error);
+        console.error("Admin layout auth load failed:", error);
         setLocation("/signin");
       } finally {
         setIsLoading(false);
       }
     }
-
+  
     load();
   }, [location, setLocation]);
 

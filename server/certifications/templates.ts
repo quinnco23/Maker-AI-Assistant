@@ -1,0 +1,55 @@
+export const certificationTemplates = [
+    {
+      id: "prusa-mk4s-operator-badge",
+      title: "Prusa MK4S Operator Badge",
+      description: "Beginner certification for safe Prusa MK4S operation.",
+      machineTypes: ["3d_printer"],
+      estimatedMinutes: 8,
+      passingScore: 80,
+      levelsCount: 5,
+      tags: ["3D Printing", "Beginner"],
+    },
+    {
+      id: "laser-cutter-safety-core",
+      title: "Laser Cutter Safety Core",
+      description: "Safety-first laser cutter certification.",
+      machineTypes: ["laser_cutter"],
+      estimatedMinutes: 12,
+      passingScore: 85,
+      levelsCount: 6,
+      tags: ["Laser", "Safety"],
+    },
+    {
+      id: "cnc-router-safety-core",
+      title: "CNC Router Safety Core",
+      description:
+        "Intro certification for CNC router safety, setup, hold-downs, and emergency stop.",
+      machineTypes: ["cnc_router"],
+      estimatedMinutes: 15,
+      passingScore: 85,
+      levelsCount: 7,
+      tags: ["CNC", "Router", "Safety"],
+    },
+    {
+      id: "waterjet-cutter-safety-core",
+      title: "Waterjet Cutter Safety Core",
+      description:
+        "Safety certification for waterjet setup, material handling, piercing, and shutdown.",
+      machineTypes: ["other"],
+      estimatedMinutes: 15,
+      passingScore: 85,
+      levelsCount: 6,
+      tags: ["Waterjet", "Safety"],
+    },
+    {
+      id: "vinyl-cutter-basic-operator",
+      title: "Vinyl Cutter Basic Operator",
+      description:
+        "Beginner certification for vinyl cutter setup, blade depth, material loading, and weeding.",
+      machineTypes: ["vinyl_cutter"],
+      estimatedMinutes: 8,
+      passingScore: 80,
+      levelsCount: 4,
+      tags: ["Vinyl", "Beginner"],
+    },
+  ];
