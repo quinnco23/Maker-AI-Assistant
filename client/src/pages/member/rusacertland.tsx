@@ -61,7 +61,29 @@ export default function PrusaCertificationPage() {
   }, [moduleId]);
 
   // ✅ moduleContent must be BEFORE useCertificationEngine
-  const moduleContent = moduleRecord?.contentJson ?? null;
+  const moduleContent = useMemo(() => {
+    const rawContent = moduleRecord?.contentJson;
+  
+    if (!rawContent) {
+      return null;
+    }
+  
+    if (typeof rawContent === "string") {
+      try {
+        return JSON.parse(rawContent);
+      } catch (error) {
+        console.error(
+          "Certification contentJson contains invalid JSON:",
+          error,
+          rawContent,
+        );
+  
+        return null;
+      }
+    }
+  
+    return rawContent;
+  }, [moduleRecord]);
   const userId = me?.user?.id ?? "guest";
 
   const baseEngine = useCertificationEngine(
