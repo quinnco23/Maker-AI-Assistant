@@ -266,36 +266,42 @@ export default function CreateMakerspacePage() {
     : "yourapp.com/spaces/your-space";
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="mx-auto max-w-6xl px-6 py-8">
-        <div className="mb-6 flex items-center justify-between gap-4">
-          <div className="space-y-3">
-            <Link
-              href="/app/admin/onboarding"
-              className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to onboarding
-            </Link>
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-50">
+  <div className="mx-auto w-full max-w-6xl min-w-0 px-4 py-5 sm:px-6 sm:py-8">
 
-            <StepProgress />
-          </div>
-
-          <div className="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700">
-            Step 1 of 5
-          </div>
+    <div className="mb-6 flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="min-w-0 space-y-3">
+        <Link
+          href="/app/admin/onboarding"
+          className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to onboarding
+        </Link>
+ 
+        <div className="min-w-0 max-w-full overflow-x-auto">
+          <StepProgress />
         </div>
+      </div>
 
-        <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-          <Card className="rounded-3xl border-0 shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-3xl">Create your makerspace</CardTitle>
-              <CardDescription className="text-base">
-                Add the basics for your public profile and internal setup.
-              </CardDescription>
-            </CardHeader>
+      <div className="w-fit shrink-0 rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700">
+        Step 1 of 5
+      </div>
+    </div>
 
-            <CardContent className="pt-4">
+        <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-8">
+        <Card className="min-w-0 overflow-hidden rounded-2xl border-0 shadow-sm sm:rounded-3xl">
+  <CardHeader className="px-4 pb-2 pt-5 sm:px-6 sm:pt-6">
+    <CardTitle className="text-2xl font-bold tracking-tight sm:text-3xl">
+      Create your makerspace
+    </CardTitle>
+
+    <CardDescription className="text-sm leading-relaxed sm:text-base">
+      Add the basics for your public profile and internal setup.
+    </CardDescription>
+  </CardHeader>
+
+  <CardContent className="min-w-0 px-4 pt-4 sm:px-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">Makerspace name</Label>
@@ -329,7 +335,32 @@ export default function CreateMakerspacePage() {
                   </div>
                   {errors.slug && <p className="text-sm text-red-600">{errors.slug}</p>}
                 </div>
+<div className="space-y-2">
+  <Label htmlFor="slug">Public URL</Label>
 
+  <div className="min-w-0 rounded-xl border bg-slate-50 p-3">
+    <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+      <div className="flex min-w-0 items-center gap-2">
+        <Globe className="h-4 w-4 shrink-0 text-slate-400" />
+        <span className="break-all text-sm text-slate-500">
+          yourapp.com/spaces/
+        </span>
+      </div>
+
+      <input
+        id="slug"
+        value={values.slug}
+        onChange={handleSlugChange}
+        placeholder="downtown-innovation-lab"
+        className="w-full min-w-0 flex-1 bg-transparent text-base font-medium text-slate-900 outline-none sm:text-sm"
+      />
+    </div>
+  </div>
+
+  {errors.slug && (
+    <p className="text-sm text-red-600">{errors.slug}</p>
+  )}
+</div>
                 <div className="space-y-2">
                   <Label htmlFor="location">Location</Label>
                   <div className="relative">
@@ -377,7 +408,7 @@ export default function CreateMakerspacePage() {
                   )}
                 </div>
 
-                <div className="space-y-3">
+                <div className="flex min-w-0 cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center transition-colors hover:bg-slate-100 sm:flex-row sm:py-8">
                   <Label htmlFor="logo">Logo (optional)</Label>
 
                   <label
@@ -415,25 +446,30 @@ export default function CreateMakerspacePage() {
                   )}
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <Button
-                    type="submit"
-                    size="lg"
-                    className="rounded-xl px-6"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Saving..." : "Continue to machines"}
-                  </Button>
+                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
+  <Button
+    type="submit"
+    size="lg"
+    className="w-full rounded-xl px-6 sm:w-auto"
+    disabled={isSubmitting}
+  >
+    {isSubmitting ? "Saving..." : "Continue to machines"}
+  </Button>
 
-                  <Button asChild variant="outline" size="lg" className="rounded-xl px-6">
-                    <Link href="/app/admin/onboarding">Cancel</Link>
-                  </Button>
-                </div>
+  <Button
+    asChild
+    variant="outline"
+    size="lg"
+    className="w-full rounded-xl px-6 sm:w-auto"
+  >
+    <Link href="/app/admin/onboarding">Cancel</Link>
+  </Button>
+</div>
               </form>
             </CardContent>
           </Card>
 
-          <div className="space-y-6">
+          <div className="min-w-0 space-y-5 lg:space-y-6">
             <Card className="rounded-3xl border-0 shadow-sm">
               <CardHeader>
                 <CardTitle>Live preview</CardTitle>
@@ -443,7 +479,7 @@ export default function CreateMakerspacePage() {
               </CardHeader>
 
               <CardContent className="space-y-4">
-                <div className="flex items-start gap-4">
+                <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start">
                   <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-slate-100">
                     {logoPreviewUrl ? (
                       <img
