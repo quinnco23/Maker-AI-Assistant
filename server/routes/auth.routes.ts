@@ -263,6 +263,10 @@ const memberMakerspace = memberMembership
       return res.status(200).json({ makerspaces });
     } catch (error) {
       console.error("Failed to load makerspace directory:", error);
+      console.log(
+  "ACTIVE POSTGRES HOST:",
+  new URL(process.env.POSTGRES_URL!).hostname
+);
       return res.status(500).json({
         message: "Failed to load makerspace directory",
       });
