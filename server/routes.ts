@@ -1,5 +1,5 @@
 import type { Express } from "express";
-import { createServer, type Server } from "http";
+
 import { storage } from "./storage";
 
 import { registerAdminOnboardingRoutes } from "./routes/admin-onboarding.ts";
@@ -13,11 +13,7 @@ import { registerAuthRoutes } from "./routes/auth.routes.ts";
 import { registerScheduleCertificationRoutes } from "./routes/cert-scheduel.ts";
 
 
-export async function registerRoutes(
-  httpServer: Server,
-  app: Express
-  
-): Promise<Server> {
+export function registerRoutes(app: Express): void {
 registerAdminOnboardingRoutes(app);
 registerAdminMakerspaceRoutes(app);
 registerMachineRoutes(app);
@@ -39,5 +35,5 @@ registerScheduleCertificationRoutes(app);
     res.json({ status: "ok" });
   });
 
-  return httpServer;
+
 }
