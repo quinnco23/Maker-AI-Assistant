@@ -6,8 +6,8 @@ import express, {
   type NextFunction,
 } from "express";
 
-import { setupAuth } from "./auth.js";
-import { registerRoutes } from "./routes.js";
+import { setupAuth } from "./auth";
+import { registerRoutes } from "./routes";
 
 const app = express();
 

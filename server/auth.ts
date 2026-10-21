@@ -2,7 +2,7 @@ import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import bcrypt from "bcryptjs";
 import type { Request, Response, NextFunction } from "express";
-import { createId, nowIso } from "./db/schema.js";
+import { createId, nowIso } from "./db/schema";
 import { storage } from "./storage.ts";
 
 const PgSession = connectPgSimple(session);
